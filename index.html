@@ -68,8 +68,8 @@
                         <option value="Godhuman" data-price="70000">Lấy Võ Godhuman (70k)</option>
                         <option value="Sanguine Art" data-price="60000">Lấy Võ Sanguine Art (60k)</option>
                     </optgroup>
-                    <optgroup label="⚔️ VŨ KHÍ & VẬT PHẨM">
-                        <option value="Tam kiếm TTK" data-price="70000">Lấy Tam kiếm TTK (70k)</option>
+                    <optgroup label="⚔️ VŨ KHÍ">
+                        <option value="Tam kiếm TTK" data-price="70000">Tam kiếm TTK (70k)</option>
                         <option value="CDK" data-price="70000">Cursed Dual Katana (70k)</option>
                         <option value="Shark Anchor" data-price="60000">Mỏ Neo Shark Anchor (60k)</option>
                         <option value="Soul Guitar" data-price="40000">Đàn Soul Guitar (40k)</option>
@@ -98,8 +98,12 @@
                 <input type="hidden" name="Loai_Don" value="Nạp Thẻ">
                 <select name="Nha_Mang"><option>Viettel</option><option>Vinaphone</option><option>Mobifone</option></select>
                 <select name="Menh_Gia" id="card-value">
-                    <option value="10000">10.000đ</option><option value="20000">20.000đ</option>
-                    <option value="50000">50.000đ</option><option value="100000">100.000đ</option>
+                    <option value="10000">10.000đ</option>
+                    <option value="20000">20.000đ</option>
+                    <option value="50000">50.000đ</option>
+                    <option value="100000">100.000đ</option>
+                    <option value="200000">200.000đ</option>
+                    <option value="500000">500.000đ</option>
                 </select>
                 <input type="text" name="Seri" placeholder="Số Seri thẻ" required>
                 <input type="text" name="Ma_The" id="card-code" placeholder="Mã thẻ" required>
@@ -171,7 +175,7 @@
         if(data.balance < price) { alert("LỖI: Bạn không đủ tiền!"); return false; }
         data.balance -= price;
         localStorage.setItem(currentUser, JSON.stringify(data));
-        alert("Đặt đơn thành công!");
+        alert("Đặt đơn thành công! Admin sẽ xử lý sớm.");
         return true;
     }
 
@@ -179,9 +183,9 @@
         const val = document.getElementById('card-value').value;
         const code = document.getElementById('card-code').value;
         const data = JSON.parse(localStorage.getItem(currentUser));
-        const log = `Nạp thẻ ${parseInt(val).toLocaleString()}đ | Mã: ${code} (thành công)`;
+        const log = `Nạp thẻ ${parseInt(val).toLocaleString()}đ | Mã: ${code} (Thành công)`;
         data.history.unshift(log);
-        data.balance += parseInt(val); // Tự động cộng tiền để test
+        data.balance += parseInt(val); // Giả lập cộng tiền để bạn test
         localStorage.setItem(currentUser, JSON.stringify(data));
     }
 
@@ -194,4 +198,5 @@
     }
 </script>
 </body>
-</html>
+    </html>
+    
