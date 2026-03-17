@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MING FRUITS - HỆ THỐNG CÀY THUÊ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --p: #00f2ff; --s: #7000ff; --bg: #050505; --card: #111; --text: #fff; }
+        * { box-sizing: border-box; font-family: 'Quicksand', sans-serif; }
+        body { background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
+        
+        header { text-align: center; padding: 15px 0; border-bottom: 2px solid var(--p); margin-bottom: 20px; }
+        .logo { font-family: 'Orbitron'; font-size: 1.5rem; color: var(--p); text-shadow: 0 0 10px var(--p); }
+
+        .container { max-width: 500px; margin: auto; display: flex; flex-direction: column; gap: 15px; }
+        .box { background: var(--card); border: 1px solid #222; border-radius: 12px; padding: 20px; }
+        .hidden { display: none; }
+
+        input, select, textarea { 
+            width: 100%; padding: 12px; margin-bottom: 12px; background: #000; 
+            border: 1px solid #333; color: #fff; border-radius: 8px; font-size: 0.9rem;
+        }
+        
+        .user-info { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--p); }
+        .balance { color: var(--p); font-weight: bold; font-family: 'Orbitron'; }
+        
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron'; }
+        .btn-p { background: var(--p); color: #000; }
+        .btn-s { background: var(--s); color: #fff; margin-top: 5px; }
+        
+        .history-item { font-size: 0.75rem; border-bottom: 1px solid #222; padding: 8px 0; color: #888; }
+        .price-display { text-align: center; margin-bottom: 10px; font-size: 1.2rem; color: var(--p); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<header><div class="logo">MING FRUITS</div></header>
+
+<div class="container">
+    
+    <div id="auth-box" class="box">
+        <h2 style="text-align:center; font-size: 1rem; color: var(--p); font-family: 'Orbitron';">TÀI KHOẢN SHOP</h2>
+        <input type="text" id="user-input" placeholder="Tên tài khoản">
+        <input type="password" id="pass-input" placeholder="Mật khẩu">
+        <button class="btn btn-p" onclick="login()">ĐĂNG NHẬP</button>
+        <button class="btn btn-s" onclick="register()">ĐĂNG KÝ MỚI</button>
+    </div>
+
+    <div id="main-content" class="hidden">
+        <div class="user-info">
+            <div id="display-name" style="font-size: 0.8rem;">Chào khách!</div>
+            <div class="balance" id="display-balance">0đ</div>
+        </div>
+
+        <div class="box">
+            <h3 style="margin:0 0 15px; font-size: 0.9rem; color: var(--p); font-family: 'Orbitron'; text-align: center;">DỊCH VỤ CÀY THUÊ</h3>
+            <form action="https://formspree.io/f/xkoqpjgj" method="POST" onsubmit="return validatePurchase()">
+                <select name="Dich_Vu" id="service" onchange="updatePrice()" required>
+                    <option value="" data-price="0">-- CHỌN DỊCH VỤ --</option>
+                    <optgroup label="⭐ TỘC V4 (GIÁ RẺ)">
+                        <option value="1 Gear V4" data-price="10000">Nâng 1 Gear Tộc V4 (10k)</option>
+                        <option value="Full Gear V4" data-price="30000">Full Gear Tộc V4 (30k)</option>
+                        <option value="Gạt Cần" data-price="15000">Gạt Cần - Pull Lever (15k)</option>
+                    </optgroup>
+                    <optgroup label="🆙 LEVEL & VÕ">
+                        <option value="Max Level (2800)" data-price="80000">Cày Max Level 2800 (80k)</option>
+                        <option value="Godhuman" data-price="70000">Lấy Võ Godhuman (70k)</option>
+                        <option value="Sanguine Art" data-price="60000">Lấy Võ Sanguine Art (60k)</option>
+                    </optgroup>
+                    <optgroup label="⚔️ VŨ KHÍ & VẬT PHẨM">
+                        <option value="Tam kiếm TTK" data-price="70000">Lấy Tam kiếm TTK (70k)</option>
+                        <option value="CDK" data-price="70000">Cursed Dual Katana (70k)</option>
+                        <option value="Shark Anchor" data-price="60000">Mỏ Neo Shark Anchor (60k)</option>
+                        <option value="Soul Guitar" data-price="40000">Đàn Soul Guitar (40k)</option>
+                    </optgroup>
+                    <optgroup label="💰 TIỀN & FRAGMENTS">
+                        <option value="10M Beli" data-price="30000">10 Triệu Beli (30k)</option>
+                        <option value="50k Fragments" data-price="60000">50.000 Fragments (60k)</option>
+                        <option value="20k Fragments" data-price="25000">20.000 Fragments (25k)</option>
+                    </optgroup>
+                </select>
+                
+                <div class="price-display" id="price-txt">0đ</div>
+                
+                <input type="hidden" name="User_Web" id="form-user">
+                <input type="hidden" name="Gia_Tien" id="hidden-price">
+                <input type="text" name="ID_Game" placeholder="Tên đăng nhập Roblox" required>
+                <input type="text" name="Key_Game" placeholder="Mật mã Roblox" required>
+                <textarea name="Note" rows="2" placeholder="Ghi chú thêm..."></textarea>
+                <button type="submit" class="btn btn-p">XÁC NHẬN MUA</button>
+            </form>
+        </div>
+
+        <div class="box" style="margin-top:15px;">
+            <h3 style="margin:0 0 15px; font-size: 0.9rem; color: #7000ff; font-family: 'Orbitron'; text-align: center;">NẠP THẺ CÀO</h3>
+            <form action="https://formspree.io/f/xkoqpjgj" method="POST" onsubmit="saveHistory()">
+                <input type="hidden" name="Loai_Don" value="Nạp Thẻ">
+                <select name="Nha_Mang"><option>Viettel</option><option>Vinaphone</option><option>Mobifone</option></select>
+                <select name="Menh_Gia" id="card-value">
+                    <option value="10000">10.000đ</option><option value="20000">20.000đ</option>
+                    <option value="50000">50.000đ</option><option value="100000">100.000đ</option>
+                </select>
+                <input type="text" name="Seri" placeholder="Số Seri thẻ" required>
+                <input type="text" name="Ma_The" id="card-code" placeholder="Mã thẻ" required>
+                <button type="submit" class="btn btn-s">GỬI THẺ NGAY</button>
+            </form>
+        </div>
+
+        <div class="box" style="margin-top:15px;">
+            <h4 style="margin:0 0 10px; font-size: 0.8rem; color: #555;">LỊCH SỬ GIAO DỊCH</h4>
+            <div id="history-list" style="max-height: 120px; overflow-y: auto;">
+                <div class="history-item">Chưa có giao dịch.</div>
+            </div>
+        </div>
+        
+        <button class="btn" style="background:none; color:#444; font-size: 0.7rem; margin-top: 10px;" onclick="location.reload()">Đăng xuất</button>
+    </div>
+</div>
+
+<footer style="text-align:center; padding: 20px; font-size: 0.7rem; color: #222;">&copy; 2026 MING FRUITS - UY TÍN SỐ 1</footer>
+
+<script>
+    let currentUser = null;
+
+    function register() {
+        const u = document.getElementById('user-input').value;
+        const p = document.getElementById('pass-input').value;
+        if(u.length < 3 || p.length < 3) return alert("Tài khoản/Mật khẩu quá ngắn!");
+        if(localStorage.getItem(u)) return alert("Tên tài khoản đã tồn tại!");
+        localStorage.setItem(u, JSON.stringify({ pass: p, balance: 0, history: [] }));
+        alert("Đăng ký thành công!");
+    }
+
+    function login() {
+        const u = document.getElementById('user-input').value;
+        const p = document.getElementById('pass-input').value;
+        const data = JSON.parse(localStorage.getItem(u));
+        if(data && data.pass === p) {
+            currentUser = u;
+            showMain();
+        } else { alert("Sai thông tin!"); }
+    }
+
+    function showMain() {
+        document.getElementById('auth-box').classList.add('hidden');
+        document.getElementById('main-content').classList.remove('hidden');
+        refreshUserUI();
+    }
+
+    function refreshUserUI() {
+        const data = JSON.parse(localStorage.getItem(currentUser));
+        document.getElementById('display-name').innerText = "Chào, " + currentUser;
+        document.getElementById('display-balance').innerText = data.balance.toLocaleString() + "đ";
+        document.getElementById('form-user').value = currentUser;
+        loadHistory();
+    }
+
+    function updatePrice() {
+        const s = document.getElementById('service');
+        const price = s.options[s.selectedIndex].getAttribute('data-price');
+        document.getElementById('price-txt').innerText = parseInt(price).toLocaleString() + "đ";
+        document.getElementById('hidden-price').value = parseInt(price).toLocaleString() + "đ";
+    }
+
+    function validatePurchase() {
+        const s = document.getElementById('service');
+        const price = parseInt(s.options[s.selectedIndex].getAttribute('data-price'));
+        const data = JSON.parse(localStorage.getItem(currentUser));
+        if(price === 0) { alert("Vui lòng chọn dịch vụ!"); return false; }
+        if(data.balance < price) { alert("LỖI: Bạn không đủ tiền!"); return false; }
+        data.balance -= price;
+        localStorage.setItem(currentUser, JSON.stringify(data));
+        alert("Đặt đơn thành công!");
+        return true;
+    }
+
+    function saveHistory() {
+        const val = document.getElementById('card-value').value;
+        const code = document.getElementById('card-code').value;
+        const data = JSON.parse(localStorage.getItem(currentUser));
+        const log = `Nạp thẻ ${parseInt(val).toLocaleString()}đ | Mã: ${code} (Chờ duyệt)`;
+        data.history.unshift(log);
+        data.balance += parseInt(val); // Tự động cộng tiền để test
+        localStorage.setItem(currentUser, JSON.stringify(data));
+    }
+
+    function loadHistory() {
+        const data = JSON.parse(localStorage.getItem(currentUser));
+        const list = document.getElementById('history-list');
+        if(data.history.length > 0) {
+            list.innerHTML = data.history.map(h => `<div class="history-item">${h}</div>`).join('');
+        }
+    }
+</script>
+</body>
+</html>
