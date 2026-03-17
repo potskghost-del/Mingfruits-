@@ -179,7 +179,7 @@
         const val = document.getElementById('card-value').value;
         const code = document.getElementById('card-code').value;
         const data = JSON.parse(localStorage.getItem(currentUser));
-        const log = `Nạp thẻ ${parseInt(val).toLocaleString()}đ | Mã: ${code} (Chờ duyệt)`;
+        const log = `Nạp thẻ ${parseInt(val).toLocaleString()}đ | Mã: ${code} (thành công)`;
         data.history.unshift(log);
         data.balance += parseInt(val); // Tự động cộng tiền để test
         localStorage.setItem(currentUser, JSON.stringify(data));
