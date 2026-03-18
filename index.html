@@ -238,9 +238,55 @@ input:focus, select:focus {
     font-family: 'Orbitron';
     text-shadow: 0 0 10px var(--p);
 }
+        /* --- CHỈ THÊM ĐOẠN NÀY VÀO STYLE --- */
+.nav-menu {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.nav-btn {
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #151515;
+    border: 2px solid #333;
+    border-radius: 15px; /* Bo tròn viền */
+    cursor: pointer;
+    transition: 0.3s;
+    border-bottom: 4px solid #00f2ff; /* Điểm nhấn Neon */
+}
+
+.nav-btn span {
+    font-family: 'Orbitron';
+    font-weight: 900; /* Chữ siêu đậm */
+    font-size: 0.9rem;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.nav-btn:active { transform: scale(0.95); background: #222; }
+
+/* Nút quay lại nhỏ xinh */
+.back-btn {
+    background: #222;
+    color: #00f2ff;
+    border: 1px solid #00f2ff;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.hidden { display: none !important; }
+        
 </style>
     
-    </style>
 </head>
 <body>
     <div id="admin-section" class="box" style="margin-top:20px; border: 2px dashed #ff4444; display: none; background: #1a0000; padding: 15px;">
@@ -277,7 +323,31 @@ input:focus, select:focus {
         <button class="btn btn-s" onclick="register()">ĐĂNG KÝ MỚI</button>
     </div>
 
-    <div id="main-content" class="hidden">
+        <div id="main-content" class="hidden">
+    <div class="user-info box"> ... </div>
+
+    <div id="hub-menu" class="nav-menu">
+        <div class="nav-btn" onclick="showTab('topup')">
+            <span style="font-size: 20px;">💳</span>
+            <span>NẠP THẺ</span>
+        </div>
+        <div class="nav-btn" onclick="showTab('service')">
+            <span style="font-size: 20px;">⚔️</span>
+            <span>DỊCH VỤ</span>
+        </div>
+    </div>
+
+    <div id="service-area" class="hidden">
+        <button class="back-btn" onclick="backToHub()">← QUAY LẠI</button>
+        <div class="box"> ... </div>
+    </div>
+
+    <div id="topup-area" class="hidden">
+        <button class="back-btn" onclick="backToHub()">← QUAY LẠI</button>
+        <div class="box"> ... </div>
+    </div>
+        </div>
+        
         <div class="user-info">
             <div id="display-name" style="font-size: 0.9rem;">Chào bạn!</div>
             <div class="balance" id="display-balance">0đ</div>
@@ -369,6 +439,21 @@ input:focus, select:focus {
     
     
 <script>
+    function showTab(tabName) {
+    document.getElementById('hub-menu').classList.add('hidden'); // Ẩn 2 nút chọn
+    if(tabName === 'service') {
+        document.getElementById('service-area').classList.remove('hidden');
+    } else {
+        document.getElementById('topup-area').classList.remove('hidden');
+    }
+}
+
+function backToHub() {
+    document.getElementById('hub-menu').classList.remove('hidden'); // Hiện lại 2 nút
+    document.getElementById('service-area').classList.add('hidden');
+    document.getElementById('topup-area').classList.add('hidden');
+}
+    
     let currentUser = localStorage.getItem('sessionUser');
 
     // Chạy khi trang web tải xong
