@@ -15,47 +15,36 @@
     overflow: hidden; /* Ẩn các phần thừa của ảnh nền */
     position: relative;
 }
+body:{
+    margin: 0; 
+    padding: 10px; 
+    line-height: 1.6; 
+    color: var(--text);
+    min-height: 100vh; 
+    position: relative; 
+    /* XÓA dòng overflow: hidden; cũ đi */
+    overflow-x: hidden; /* Chỉ ẩn thanh cuộn ngang để không bị lệch ảnh */
+    background: #000;
+}
 
-/* TẠO LỚP NỀN RIÊNG ĐỂ CHUYỂN ĐỘNG */
+/* HIỆU ỨNG NỀN RỒNG CHUYỂN ĐỘNG */
 body::before {
-    content: "";
-    position: fixed;
-    /* Làm cho ảnh nền to hơn màn hình 20% để có không gian di chuyển */
+    content: ""; 
+    position: fixed; /* Giữ cố định nền khi vuốt nội dung */
     top: -10%; 
-    left: -10%;
-    width: 120%;
+    left: -10%; 
+    width: 120%; 
     height: 120%;
-    
-    /* Dán link ảnh Rồng của bạn vào đây */
     background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJ89uI6jwOxXEapNmT2mpEJDbMQagObNGIZommdkak0Q&s=10');
-    
-    /* Thuộc tính cơ bản cho nền */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    
-    /* Lớp phủ đen mờ 60% để nổi bật chữ */
-    background-color: rgba(0, 0, 0, 0.6);
-    background-blend-mode: darken; /* Hòa trộn màu đen vào ảnh */
-    
-    z-index: -1; /* Nằm dưới cùng */
-    
-    /* KÍCH HOẠT ANIMATION */
-    /* Tên: moveBackground, Thời gian: 5s, Kiểu: nhẹ nhàng, Lặp: vô hạn */
-    animation: moveBackground 20s ease-in-out infinite;
+    background-size: cover; 
+    background-position: center; 
+    z-index: -2;
+    filter: brightness(0.4);
+    animation: moveBackground 15s ease-in-out infinite;
+    /* Thêm dòng này để không bị chạm nhầm vào nền khi vuốt */
+    pointer-events: none; 
 }
-
-/* ĐỊNH NGHĨA CHUYỂN ĐỘNG */
-@keyframes moveBackground {
-    0%, 100% {
-        /* Vị trí ban đầu: hơi lệch sang trái và lên trên */
-        transform: translate(0, 0);
-    }
-    50% {
-        /* Đến giữa chu kỳ: lệch sang phải và xuống dưới */
-        transform: translate(5%, 5%);
-    }
-}
+        
         
         :root { --p: #00f2ff; --s: #7000ff; --bg: #050505; --card: #111; --text: #fff; }
         * { box-sizing: border-box; font-family: 'Quicksand', sans-serif; }
@@ -239,10 +228,7 @@ body::before {
         <button class="btn" style="background:none; color:#ff4444; font-size: 0.8rem; margin-top: 10px;" onclick="logout()">ĐĂNG XUẤT</button>
     </div>
 </div>
-    <div style="display: flex; gap: 5px; margin-top: 5px;">
-    <button class="btn" style="background: #2196F3; color: #fff; flex: 1; font-size: 0.7rem;" onclick="adminStatus('ĐANG CÀY')">BẮT ĐẦU CÀY</button>
-    <button class="btn" style="background: #00ff88; color: #000; flex: 1; font-size: 0.7rem;" onclick="adminStatus('HOÀN THÀNH')">XONG ĐƠN</button>
-    </div>
+    
     
 <script>
     let currentUser = localStorage.getItem('sessionUser');
