@@ -249,6 +249,25 @@
         localStorage.removeItem('sessionUser');
         location.reload();
     }
+function checkAdmin() {
+    let p = prompt("Mã Admin:");
+    if(p === "123456") document.getElementById('admin-section').style.display = 'block';
+}
+
+function adminAddMoney() {
+    let target = document.getElementById('admin-target-user').value.trim();
+    let money = parseInt(document.getElementById('admin-amount').value);
+    let userData = localStorage.getItem(target);
+    if(userData) {
+        let data = JSON.parse(userData);
+        data.balance += money;
+        data.history.unshift(`[HỆ THỐNG] +${money.toLocaleString()}đ`);
+        localStorage.setItem(target, JSON.stringify(data));
+        alert("Đã cộng tiền cho " + target);
+        location.reload();
+    } else { alert("Sai tên tài khoản!"); }
+    }
+    
 </script>
 </body>
     </html>
