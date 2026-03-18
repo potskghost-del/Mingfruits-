@@ -151,7 +151,13 @@
 </div>
 <script>
     let currentUser = localStorage.getItem('sessionUser');
-    window.onload = function() { if(currentUser) showMain(); }
+
+    // Chạy khi trang web tải xong
+    window.onload = function() { 
+        if(currentUser) {
+            showMain(); 
+        }
+    }
 
     function register() {
         const u = document.getElementById('user-input').value.trim();
@@ -185,7 +191,17 @@
         document.getElementById('display-name').innerText = "Chào, " + currentUser;
         document.getElementById('display-balance').innerText = data.balance.toLocaleString() + "đ";
         document.getElementById('form-user').value = currentUser;
-        loadHistory();
+        loadHistory(); // Gọi hàm này để hiện lịch sử
+    }
+
+    function loadHistory() {
+        const data = JSON.parse(localStorage.getItem(currentUser));
+        const list = document.getElementById('history-list');
+        if(data && data.history && data.history.length > 0) {
+            list.innerHTML = data.history.map(h => `<div class="history-item">${h}</div>`).join('');
+        } else {
+            list.innerHTML = '<div class="history-item">Chưa có giao dịch.</div>';
+        }
     }
 
     function updatePrice() {
@@ -222,36 +238,33 @@
         alert("Gửi thẻ thành công!");
         return true;
     }
-    function checkPendingMoney() {
-    const target = document.getElementById('admin-target-user').value.trim();
-    const infoDiv = document.getElementById('admin-pending-info');
-    let userData = localStorage.getItem(target);
 
-    if (userData && infoDiv) {
-        let data = JSON.parse(userData);
-        let total = 0;
-        if (data.history) {
-            data.history.forEach(item => {
-                if (item.includes('[CHỜ DUYỆT]')) {
-                    // Xóa dấu chấm và chữ đ, sau đó chỉ lấy các chữ số
-                    let cleanStr = item.replace(/\./g, '').replace('đ', '');
-                    let m = cleanStr.match(/\d+/); 
-                    if (m) total += parseInt(m[0]);
-                }
-            });
+        function checkPendingMoney() {
+        const target = document.getElementById('admin-target-user').value.trim();
+        const infoDiv = document.getElementById('admin-pending-info');
+        let userData = localStorage.getItem(target);
+        if (userData && infoDiv) {
+            let data = JSON.parse(userData);
+            let total = 0;
+            if (data.history) {
+                data.history.forEach(item => {
+                    if (item.includes('[CHỜ DUYỆT]')) {
+                        // Sửa lỗi lọc số: Xóa sạch dấu chấm và chữ đ trước khi lấy số
+                        let cleanStr = item.replace(/\./g, '').replace('đ', '');
+                        let m = cleanStr.match(/\d+/); 
+                        if (m) total += parseInt(m[0]);
+                    }
+                });
+            }
+            if (total > 0) {
+                infoDiv.innerHTML = `💰 Đang nạp: ${total.toLocaleString()}đ`;
+                document.getElementById('admin-amount').value = total;
+            } else {
+                infoDiv.innerHTML = "❌ Không có tiền chờ";
+                document.getElementById('admin-amount').value = "";
+            }
         }
-        if (total > 0) {
-            infoDiv.innerHTML = `💰 Đang nạp: ${total.toLocaleString()}đ`;
-            document.getElementById('admin-amount').value = total;
-        } else {
-            infoDiv.innerHTML = "❌ Không có tiền chờ";
-            document.getElementById('admin-amount').value = "";
-        }
-    } else if (infoDiv) {
-        infoDiv.innerHTML = "";
     }
-    }
-            
 
     function adminUpdate(type) {
         const target = document.getElementById('admin-target-user').value.trim();
@@ -264,8 +277,11 @@
             let finalAmount = (type === 1) ? amount : -amount;
             data.balance += finalAmount;
             
+            // Sửa lỗi đóng ngoặc ở đây (Thay cho đoạn trong ảnh 6723)
             if (type === 1) {
-                data.history = data.history.map(item => item.replace('[CHỜ DUYỆT]', '<b style="color: #00ff88;">[ĐÃ XONG]</b>'));
+                data.history = data.history.map(item => {
+                    return item.replace('[CHỜ DUYỆT]', '<b style="color: #00ff88;">[ĐÃ XONG]</b>');
+                });
             }
             
             data.history.unshift(`<span style="color: #00ff88;">[HỆ THỐNG]</span> ${finalAmount > 0 ? '+' : ''}${finalAmount.toLocaleString()}đ`);
@@ -275,12 +291,26 @@
         } else alert("Sai tài khoản!");
     }
 
+    function adminReject() {
+        const target = document.getElementById('admin-target-user').value.trim();
+        let userData = localStorage.getItem(target);
+        if (userData) {
+            let data = JSON.parse(userData);
+            data.history = data.history.map(item => item.replace('[CHỜ DUYỆT]', '<b style="color: #ff4444;">[THẺ SAI/HỦY]</b>'));
+            localStorage.setItem(target, JSON.stringify(data));
+            alert("Đã hủy đơn!");
+            location.reload();
+        }
+    }
+
     function loadHistory() {
         const data = JSON.parse(localStorage.getItem(currentUser));
         const list = document.getElementById('history-list');
-        if(data && data.history.length > 0) {
+        if(data && data.history && data.history.length > 0) {
             list.innerHTML = data.history.map(h => `<div class="history-item">${h}</div>`).join('');
-        } else list.innerHTML = '<div class="history-item">Chưa có giao dịch.</div>';
+        } else {
+            list.innerHTML = '<div class="history-item">Chưa có giao dịch.</div>';
+        }
     }
 
     function checkAdmin() {
@@ -292,21 +322,6 @@
         localStorage.removeItem('sessionUser');
         location.reload();
     }
-function adminReject() {
-    const target = document.getElementById('admin-target-user').value.trim();
-    let userData = localStorage.getItem(target);
-    if (userData) {
-        let data = JSON.parse(userData);
-        data.history = data.history.map(item => 
-            item.replace('[CHỜ DUYỆT]', '<b style="color: #ff4444;">[THẺ SAI/HỦY]</b>')
-        );
-        localStorage.setItem(target, JSON.stringify(data));
-        alert("Đã hủy các đơn chờ của: " + target);
-        location.reload();
-    }
-    }
-    
 </script>
 </body>
 </html>
-
