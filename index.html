@@ -194,15 +194,6 @@
         loadHistory(); // Gọi hàm này để hiện lịch sử
     }
 
-    function loadHistory() {
-        const data = JSON.parse(localStorage.getItem(currentUser));
-        const list = document.getElementById('history-list');
-        if(data && data.history && data.history.length > 0) {
-            list.innerHTML = data.history.map(h => `<div class="history-item">${h}</div>`).join('');
-        } else {
-            list.innerHTML = '<div class="history-item">Chưa có giao dịch.</div>';
-        }
-    }
 
     function updatePrice() {
         const s = document.getElementById('service');
