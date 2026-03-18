@@ -240,32 +240,40 @@
     }
 
         function checkPendingMoney() {
-        const target = document.getElementById('admin-target-user').value.trim();
-        const infoDiv = document.getElementById('admin-pending-info');
-        let userData = localStorage.getItem(target);
-        if (userData && infoDiv) {
-            let data = JSON.parse(userData);
-            let total = 0;
-            if (data.history) {
-                data.history.forEach(item => {
-                    if (item.includes('[CHỜ DUYỆT]')) {
-                        // Sửa lỗi lọc số: Xóa sạch dấu chấm và chữ đ trước khi lấy số
-                        let cleanStr = item.replace(/\./g, '').replace('đ', '');
-                        let m = cleanStr.match(/\d+/); 
-                        if (m) total += parseInt(m[0]);
-                    }
-                });
-            }
-            if (total > 0) {
-                infoDiv.innerHTML = `💰 Đang nạp: ${total.toLocaleString()}đ`;
-                document.getElementById('admin-amount').value = total;
-            } else {
-                infoDiv.innerHTML = "❌ Không có tiền chờ";
-                document.getElementById('admin-amount').value = "";
-            }
-        }
-    }
+    const target = document.getElementById('admin-target-user').value.trim();
+    const infoDiv = document.getElementById('admin-pending-info');
+    let userData = localStorage.getItem(target);
 
+    if (userData && infoDiv) {
+        let data = JSON.parse(userData);
+        let total = 0;
+        if (data.history) {
+            data.history.forEach(item => {
+                // Chỉ quét những dòng có chữ [CHỜ DUYỆT]
+                if (item.includes('[CHỜ DUYỆT]')) {
+                    // Tách lấy phần số đứng trước chữ 'đ' và xóa dấu chấm
+                    let parts = item.split(' '); 
+                    let priceStr = parts[parts.length - 1]; // Lấy phần cuối cùng (ví dụ: 10.000đ)
+                    let cleanNumber = priceStr.replace(/\./g, '').replace('đ', '');
+                    
+                    let num = parseInt(cleanNumber);
+                    if (!isNaN(num)) total += num;
+                }
+            });
+        }
+        
+        if (total > 0) {
+            infoDiv.innerHTML = `💰 Đang nạp: ${total.toLocaleString()}đ`;
+            document.getElementById('admin-amount').value = total;
+        } else {
+            infoDiv.innerHTML = "❌ Không có tiền chờ";
+            document.getElementById('admin-amount').value = "";
+        }
+    } else if (infoDiv) {
+        infoDiv.innerHTML = "";
+    }
+    }
+    
     function adminUpdate(type) {
         const target = document.getElementById('admin-target-user').value.trim();
         let amount = parseInt(document.getElementById('admin-amount').value);
