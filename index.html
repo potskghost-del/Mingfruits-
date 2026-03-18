@@ -12,7 +12,33 @@
         header { text-align: center; padding: 20px 0; border-bottom: 2px solid var(--p); margin-bottom: 20px; }
         .logo { font-family: 'Orbitron'; font-size: 1.8rem; color: var(--p); text-shadow: 0 0 15px var(--p); letter-spacing: 2px; }
         .container { max-width: 550px; margin: auto; display: flex; flex-direction: column; gap: 15px; }
-        .box { background: var(--card); border: 1px solid #222; border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .box { 
+    background: rgba(10, 10, 10, 0.85); 
+    border: 1px solid transparent;
+    border-radius: 15px; 
+    padding: 20px; 
+    position: relative;
+    backdrop-filter: blur(10px); /* Hiệu ứng kính mờ */
+}
+
+.box::before {
+    content: "";
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    background: linear-gradient(45deg, #00f2ff, #7000ff, #00f2ff);
+    z-index: -1;
+    border-radius: 17px;
+    background-size: 400%;
+    animation: borderGlow 5s linear infinite;
+    opacity: 0.5;
+}
+
+@keyframes borderGlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+        { background: var(--card); border: 1px solid #222; border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .hidden { display: none; }
         input, select, textarea { width: 100%; padding: 14px; margin-bottom: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; font-size: 0.95rem; outline: none; transition: 0.3s; }
         input:focus, select:focus { border-color: var(--p); box-shadow: 0 0 8px var(--p); }
