@@ -150,7 +150,6 @@
     </div>
 </div>
 <script>
-    // Kiểm tra phiên đăng nhập
     let currentUser = localStorage.getItem('sessionUser');
     window.onload = function() { if(currentUser) showMain(); }
 
@@ -158,9 +157,9 @@
         const u = document.getElementById('user-input').value.trim();
         const p = document.getElementById('pass-input').value.trim();
         if(u.length < 3) return alert("Tên tài khoản phải từ 3 ký tự!");
-        if(localStorage.getItem(u)) return alert("Tài khoản này đã tồn tại trên hệ thống!");
+        if(localStorage.getItem(u)) return alert("Tài khoản này đã tồn tại!");
         localStorage.setItem(u, JSON.stringify({ pass: p, balance: 0, history: [] }));
-        alert("Đăng ký thành công! Hãy đăng nhập để mua hàng.");
+        alert("Đăng ký thành công!");
     }
 
     function login() {
@@ -182,6 +181,7 @@
 
     function refreshUserUI() {
         const data = JSON.parse(localStorage.getItem(currentUser));
+        if(!data) return;
         document.getElementById('display-name').innerText = "Chào, " + currentUser;
         document.getElementById('display-balance').innerText = data.balance.toLocaleString() + "đ";
         document.getElementById('form-user').value = currentUser;
@@ -198,108 +198,91 @@
     function validatePurchase() {
         const s = document.getElementById('service');
         const price = parseInt(s.options[s.selectedIndex].getAttribute('data-price'));
-        const robloxU = document.getElementById('roblox-user').value.trim();
-        const robloxP = document.getElementById('roblox-pass').value.trim();
         const data = JSON.parse(localStorage.getItem(currentUser));
-        
-        if(price === 0) { alert("Vui lòng chọn một dịch vụ cày!"); return false; }
-        if(robloxU === "" || robloxP === "") { alert("Vui lòng nhập acc Roblox để shop vào cày!"); return false; }
-        if(data.balance < price) { alert("Tài khoản không đủ tiền vui lòng nạp thêm!"); return false; }
+        if(price === 0) { alert("Chọn dịch vụ!"); return false; }
+        if(data.balance < price) { alert("Không đủ tiền!"); return false; }
 
         data.balance -= price;
-        const log = `<span class="tag-buy">[CÀY THUÊ]</span> ${s.value} (Chờ duyệt đơn)`;
-        data.history.unshift(log);
+        data.history.unshift(`<span class="tag-buy">[CÀY THUÊ]</span> ${s.value} (-${price.toLocaleString()}đ)`);
         localStorage.setItem(currentUser, JSON.stringify(data));
-        alert("Đặt đơn thành công! Vui lòng không đổi pass Roblox lúc này.");
         return true;
     }
+
     function validateCard() {
-    const seri = document.getElementById('card-seri').value.trim();
-    const code = document.getElementById('card-code').value.trim();
-    const val = document.getElementById('card-value').value;
-    const type = document.getElementById('card-type').value;
+        const seri = document.getElementById('card-seri').value.trim();
+        const code = document.getElementById('card-code').value.trim();
+        const val = document.getElementById('card-value').value;
+        const type = document.getElementById('card-type').value;
+        if(seri === "" || code === "") { alert("Nhập đủ thông tin!"); return false; }
 
-    if(seri === "" || code === "") { alert("Nhập đủ Seri và Mã thẻ!"); return false; }
+        const data = JSON.parse(localStorage.getItem(currentUser));
+        const log = `<span style="color: #ff9800;">[CHỜ DUYỆT]</span> ${type} ${parseInt(val).toLocaleString()}đ`;
+        data.history.unshift(log);
+        localStorage.setItem(currentUser, JSON.stringify(data));
+        alert("Gửi thẻ thành công!");
+        return true;
+    }
 
-    const data = JSON.parse(localStorage.getItem(currentUser));
-    // Dòng này giúp hàm checkPendingMoney tìm thấy tiền chờ duyệt
-    const log = `<span style="color: #ff9800;">[CHỜ DUYỆT]</span> ${type} ${parseInt(val).toLocaleString()}đ`;
-    data.history.unshift(log);
-    
-    localStorage.setItem(currentUser, JSON.stringify(data));
-    alert("Gửi thẻ thành công! Đợi Admin duyệt.");
-    location.reload();
-    return true;
-}
-
-// ĐÂY LÀ HÀM QUAN TRỌNG ĐỂ HIỆN SỐ TIỀN CHỜ
-function checkPendingMoney() {
-    const target = document.getElementById('admin-target-user').value.trim();
-    const infoDiv = document.getElementById('admin-pending-info');
-    let userData = localStorage.getItem(target);
-
-    if (userData && infoDiv) {
-        let data = JSON.parse(userData);
-        let total = 0;
-        if (data.history) {
+    function checkPendingMoney() {
+        const target = document.getElementById('admin-target-user').value.trim();
+        const infoDiv = document.getElementById('admin-pending-info');
+        let userData = localStorage.getItem(target);
+        if (userData && infoDiv) {
+            let data = JSON.parse(userData);
+            let total = 0;
             data.history.forEach(item => {
                 if (item.includes('[CHỜ DUYỆT]')) {
                     let m = item.replace(/\./g, '').match(/\d+/);
                     if (m) total += parseInt(m[0]);
                 }
             });
-        }
-        if (total > 0) {
-            infoDiv.innerHTML = `💰 Đang nạp: ${total.toLocaleString()}đ`;
-            document.getElementById('admin-amount').value = total;
-        } else {
-            infoDiv.innerHTML = "❌ Không có tiền chờ";
-            document.getElementById('admin-amount').value = "";
-        }
-    } else if (infoDiv) {
-        infoDiv.innerHTML = "";
+            if (total > 0) {
+                infoDiv.innerHTML = `💰 Đang nạp: ${total.toLocaleString()}đ`;
+                document.getElementById('admin-amount').value = total;
+            } else { infoDiv.innerHTML = "❌ Không có tiền chờ"; }
+        } else { infoDiv.innerHTML = ""; }
     }
-}
 
-function adminAddMoney() {
-    const target = document.getElementById('admin-target-user').value.trim();
-    let amount = parseInt(document.getElementById('admin-amount').value);
-    
-    if (!target || isNaN(amount)) return alert("Nhập đủ tên và số tiền!");
+    function adminUpdate(type) {
+        const target = document.getElementById('admin-target-user').value.trim();
+        let amount = parseInt(document.getElementById('admin-amount').value);
+        if (!target || isNaN(amount)) return alert("Nhập đủ tên và số tiền!");
 
-    let userData = localStorage.getItem(target);
-    if (userData) {
-        let data = JSON.parse(userData);
-        data.balance += amount;
-        
-        // Tự động duyệt các dòng chờ
-        if (data.history) {
-            data.history = data.history.map(item => 
-                item.replace('[CHỜ DUYỆT]', '<b style="color: #00ff88;">[ĐÃ XONG]</b>')
-            );
-        }
-        
-        data.history.unshift(`<span style="color: #00ff88;">[HỆ THỐNG]</span> +${amount.toLocaleString()}đ`);
-        localStorage.setItem(target, JSON.stringify(data));
-        alert("Đã xử lý xong cho: " + target);
+        let userData = localStorage.getItem(target);
+        if (userData) {
+            let data = JSON.parse(userData);
+            let finalAmount = (type === 1) ? amount : -amount;
+            data.balance += finalAmount;
+            
+            if (type === 1) {
+                data.history = data.history.map(item => item.replace('[CHỜ DUYỆT]', '<b style="color: #00ff88;">[ĐÃ XONG]</b>'));
+            }
+            
+            data.history.unshift(`<span style="color: #00ff88;">[HỆ THỐNG]</span> ${finalAmount > 0 ? '+' : ''}${finalAmount.toLocaleString()}đ`);
+            localStorage.setItem(target, JSON.stringify(data));
+            alert("Thành công!");
+            location.reload();
+        } else alert("Sai tài khoản!");
+    }
+
+    function loadHistory() {
+        const data = JSON.parse(localStorage.getItem(currentUser));
+        const list = document.getElementById('history-list');
+        if(data && data.history.length > 0) {
+            list.innerHTML = data.history.map(h => `<div class="history-item">${h}</div>`).join('');
+        } else list.innerHTML = '<div class="history-item">Chưa có giao dịch.</div>';
+    }
+
+    function checkAdmin() {
+        let p = prompt("Mã Admin:");
+        if(p === "123456") document.getElementById('admin-section').style.display = 'block';
+    }
+
+    function logout() {
+        localStorage.removeItem('sessionUser');
         location.reload();
-    } else {
-        alert("Không tìm thấy tài khoản!");
     }
-}
+</script>
+</body>
+</html>
 
-function loadHistory() {
-    const data = JSON.parse(localStorage.getItem(currentUser));
-    const list = document.getElementById('history-list');
-    if(data && data.history.length > 0) {
-        list.innerHTML = data.history.map(h => `<div class="history-item">${h}</div>`).join('');
-    } else {
-        list.innerHTML = '<div class="history-item">Chưa có giao dịch.</div>';
-    }
-}
-
-function checkAdmin() {
-    let p = prompt("Mã Admin:");
-    if(p === "123456") document.getElementById('admin-section').style.display = 'block';
-    }
-    
