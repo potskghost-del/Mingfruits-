@@ -229,11 +229,13 @@
         const data = JSON.parse(localStorage.getItem(currentUser));
         const log = `<span class="tag-card">[NẠP THẺ]</span> ${type} ${parseInt(val).toLocaleString()}đ (Thành công)`;
         data.history.unshift(log);
-        data.balance += parseInt(val);
-        localStorage.setItem(currentUser, JSON.stringify(data));
-        alert("Gửi thẻ thành công! Tiền đã được cộng thêm vào tài khoản .");
-        return true;
-    }
+    // data.balance += parseInt(val); // Xóa hoặc thêm dấu // ở đầu để chặn cộng tiền ngay
+const log = `<span style="color: #ff9800;">[CHỜ DUYỆT]</span> ${type} ${parseInt(val).toLocaleString()}đ - Đang kiểm tra`;
+data.history.unshift(log); // Lưu dòng chờ duyệt vào lịch sử khách
+localStorage.setItem(currentUser, JSON.stringify(data));
+alert("Gửi thẻ thành công! Vui lòng chờ Admin kiểm tra và cộng tiền.");
+location.reload(); // Load lại trang để khách thấy chữ "Chờ duyệt"
+        
 
     function loadHistory() {
         const data = JSON.parse(localStorage.getItem(currentUser));
