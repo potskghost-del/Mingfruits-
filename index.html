@@ -30,16 +30,23 @@
         option { color: #fff; }
     </style>
 </head>
-<body><div id="admin-section" class="box" style="margin-top:20px; border: 2px dashed #ff4444; display: none; background: #1a0000; padding: 15px;">
-    <h3 style="color: #ff4444; font-family: 'Orbitron'; font-size: 0.8rem; text-align: center;">BẢNG ADMIN MING FRUIT</h3>
-    <input type="text" id="admin-target-user" placeholder="Tên tài khoản khách">
-    <input type="number" id="admin-amount" placeholder="Số tiền cộng">
-    <button class="btn" style="background: #ff4444; color: #fff;" onclick="adminAddMoney()">XÁC NHẬN CỘNG TIỀN</button>
-</div>
+<body>
+    <div id="admin-section" class="box" style="margin-top:20px; border: 2px dashed #ff4444; display: none; background: #1a0000; padding: 15px;">
+        <h3 style="color: #ff4444; font-family: 'Orbitron'; font-size: 0.8rem; text-align: center;">QUẢN TRỊ MING FRUIT</h3>
+        <input type="text" id="admin-target-user" placeholder="Nhập tên khách..." oninput="checkPendingMoney()">
+        <div id="admin-pending-info" style="color: #ff9800; font-size: 0.85rem; text-align: center; margin-bottom: 10px; font-weight: bold;"></div>
+        <input type="number" id="admin-amount" placeholder="Số tiền thực nhận">
+        <div style="display: flex; gap: 5px;">
+            <button class="btn" style="background: #00ff88; color: #000; flex: 1;" onclick="adminUpdate(1)">CỘNG TIỀN</button>
+            <button class="btn" style="background: #ff4444; color: #fff; flex: 1;" onclick="adminUpdate(-1)">TRỪ TIỀN</button>
+        </div>
+        <button class="btn" style="background: #ff9800; color: #fff; margin-top: 5px;" onclick="adminReject()">HỦY ĐƠN (SAI MÃ)</button>
+    </div>
 
-<div style="text-align: center; margin-top: 15px;">
-    <span onclick="checkAdmin()" style="color: #111; font-size: 9px; cursor: pointer;">Hệ thống Ming Fruit</span>
-</div>
+    <div style="text-align: center; margin-top: 15px;">
+        <span onclick="checkAdmin()" style="color: transparent; font-size: 9px; cursor: pointer;">Hệ thống Ming Fruit</span>
+    </div>
+    
     
 
 <header><div class="logo">MING FRUITS</div></header>
