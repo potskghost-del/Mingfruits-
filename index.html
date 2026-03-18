@@ -222,26 +222,36 @@
         alert("Gửi thẻ thành công!");
         return true;
     }
-
     function checkPendingMoney() {
-        const target = document.getElementById('admin-target-user').value.trim();
-        const infoDiv = document.getElementById('admin-pending-info');
-        let userData = localStorage.getItem(target);
-        if (userData && infoDiv) {
-            let data = JSON.parse(userData);
-            let total = 0;
+    const target = document.getElementById('admin-target-user').value.trim();
+    const infoDiv = document.getElementById('admin-pending-info');
+    let userData = localStorage.getItem(target);
+
+    if (userData && infoDiv) {
+        let data = JSON.parse(userData);
+        let total = 0;
+        if (data.history) {
             data.history.forEach(item => {
                 if (item.includes('[CHỜ DUYỆT]')) {
-                    let m = item.replace(/\./g, '').match(/\d+/);
+                    // Xóa dấu chấm và chữ đ, sau đó chỉ lấy các chữ số
+                    let cleanStr = item.replace(/\./g, '').replace('đ', '');
+                    let m = cleanStr.match(/\d+/); 
                     if (m) total += parseInt(m[0]);
                 }
             });
-            if (total > 0) {
-                infoDiv.innerHTML = `💰 Đang nạp: ${total.toLocaleString()}đ`;
-                document.getElementById('admin-amount').value = total;
-            } else { infoDiv.innerHTML = "❌ Không có tiền chờ"; }
-        } else { infoDiv.innerHTML = ""; }
+        }
+        if (total > 0) {
+            infoDiv.innerHTML = `💰 Đang nạp: ${total.toLocaleString()}đ`;
+            document.getElementById('admin-amount').value = total;
+        } else {
+            infoDiv.innerHTML = "❌ Không có tiền chờ";
+            document.getElementById('admin-amount').value = "";
+        }
+    } else if (infoDiv) {
+        infoDiv.innerHTML = "";
     }
+    }
+            
 
     function adminUpdate(type) {
         const target = document.getElementById('admin-target-user').value.trim();
