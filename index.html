@@ -206,50 +206,59 @@
         alert("Đặt đơn thành công! Vui lòng không đổi pass Roblox lúc này.");
         return true;
     }
-function validateCard() {
-    const seri = document.getElementById('card-seri').value.trim();
-    const code = document.getElementById('card-code').value.trim();
-    const val = document.getElementById('card-value').value;
-    const type = document.getElementById('card-type').value;
+    function validateCard() {
+        const seri = document.getElementById('card-seri').value.trim();
+        const code = document.getElementById('card-code').value.trim();
+        const val = document.getElementById('card-value').value;
+        const type = document.getElementById('card-type').value;
 
-    if(seri === "" || code === "") { alert("Nhập đủ Seri và Mã thẻ!"); return false; }
-    if(isNaN(seri) || isNaN(code)) { alert("Chỉ nhập số!"); return false; }
+        if(seri === "" || code === "") { alert("Nhập đủ Seri và Mã thẻ!"); return false; }
+        if(isNaN(seri) || isNaN(code)) { alert("Chỉ nhập số!"); return false; }
 
-    const data = JSON.parse(localStorage.getItem(currentUser));
-    const log = `<span style="color: #ff9800;">[CHỜ DUYỆT]</span> ${type} ${parseInt(val).toLocaleString()}đ`;
-    data.history.unshift(log);
-    
-    localStorage.setItem(currentUser, JSON.stringify(data));
-    alert("Gửi thẻ thành công! Đợi Admin duyệt.");
-    location.reload();
-    return true;
-}
-
-function adminAddMoney() {
-    const target = document.getElementById('admin-target-user').value.trim();
-    const amount = parseInt(document.getElementById('admin-amount').value);
-    
-    if (!target || isNaN(amount)) {
-        alert("⚠️ Nhập đủ tên và số tiền!");
-        return;
+        const data = JSON.parse(localStorage.getItem(currentUser));
+        const log = `<span style="color: #ff9800;">[CHỜ DUYỆT]</span> ${type} ${parseInt(val).toLocaleString()}đ`;
+        data.history.unshift(log);
+        
+        localStorage.setItem(currentUser, JSON.stringify(data));
+        alert("Gửi thẻ thành công! Đợi Admin duyệt.");
+        location.reload();
+        return true;
     }
 
-    let userData = localStorage.getItem(target);
-    if (userData) {
-        let data = JSON.parse(userData);
-        data.balance += amount; 
-        if (data.history) {
-            data.history = data.history.map(item => item.replace('[CHỜ DUYỆT]', '<b style="color: #00ff88;">[ĐÃ XONG]</b>'));
+    function adminAddMoney() {
+        const target = document.getElementById('admin-target-user').value.trim();
+        const amount = parseInt(document.getElementById('admin-amount').value);
+        
+        if (!target || isNaN(amount)) {
+            alert("⚠️ Nhập đủ tên khách và số tiền!");
+            return;
         }
-        data.history.unshift(`<span style="color: #00ff88;">[HỆ THỐNG]</span> +${amount.toLocaleString()}đ`);
-        localStorage.setItem(target, JSON.stringify(data));
-        alert("✅ Thành công!");
-        if(currentUser === target) location.reload();
-    } else {
-        alert("❌ Sai tên tài khoản!");
+
+        let userData = localStorage.getItem(target);
+        if (userData) {
+            let data = JSON.parse(userData);
+            data.balance += amount; 
+            
+            // Tự động đổi trạng thái từ [CHỜ DUYỆT] sang [ĐÃ XONG]
+            if (data.history) {
+                data.history = data.history.map(item => 
+                    item.replace('[CHỜ DUYỆT]', '<b style="color: #00ff88;">[ĐÃ XONG]</b>')
+                );
+            }
+            
+            data.history.unshift(`<span style="color: #00ff88;">[HỆ THỐNG]</span> +${amount.toLocaleString()}đ thành công!`);
+            localStorage.setItem(target, JSON.stringify(data));
+            
+            alert("✅ Đã cộng tiền và cập nhật lịch sử cho: " + target);
+            if(currentUser === target) location.reload();
+            
+            // Reset ô nhập
+            document.getElementById('admin-target-user').value = "";
+            document.getElementById('admin-amount').value = "";
+        } else {
+            alert("❌ Sai tên tài khoản! Không tìm thấy người này.");
+        }
     }
-}
-    
     
     function loadHistory() {
         const data = JSON.parse(localStorage.getItem(currentUser));
@@ -265,26 +274,16 @@ function adminAddMoney() {
         localStorage.removeItem('sessionUser');
         location.reload();
     }
-function checkAdmin() {
-    let p = prompt("Mã Admin:");
-    if(p === "123456") document.getElementById('admin-section').style.display = 'block';
-}
 
-function adminAddMoney() {
-    let target = document.getElementById('admin-target-user').value.trim();
-    let money = parseInt(document.getElementById('admin-amount').value);
-    let userData = localStorage.getItem(target);
-    if(userData) {
-        let data = JSON.parse(userData);
-        data.balance += money;
-        data.history.unshift(`[HỆ THỐNG] +${money.toLocaleString()}đ`);
-        localStorage.setItem(target, JSON.stringify(data));
-        alert("Đã cộng tiền cho " + target);
-        location.reload();
-    } else { alert("Sai tên tài khoản!"); }
+    function checkAdmin() {
+        let p = prompt("Mã Admin:");
+        if(p === "123456") {
+            document.getElementById('admin-section').style.display = 'block';
+            alert("Đã mở bảng Admin!");
+        } else {
+            alert("Sai mã rồi!");
+        }
     }
-    
 </script>
 </body>
-    </html>
-    
+</html>
