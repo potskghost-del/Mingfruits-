@@ -6,7 +6,91 @@
     <title>MING FRUITS - SHOP CÀY THUÊ</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
+/* TỔNG THỂ BODY */
+body {
+    margin: 0;
+    padding: 15px;
+    background: #0a0a0a;
+    color: #fff;
+    font-family: 'Quicksand', sans-serif;
+    min-height: 101vh; /* Mở khóa vuốt để reload trang */
+    overflow-y: auto;
+}
 
+.container {
+    max-width: 500px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* THIẾT KẾ BOX CHUNG */
+.box {
+    background: #151515;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #252525;
+    border-top: 3px solid #00f2ff; /* Viền xanh Neon đặc trưng shop game */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.box h2, .box h3 {
+    font-family: 'Orbitron';
+    color: #00f2ff;
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+}
+
+/* INPUT & SELECT */
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    background: #000;
+    border: 1px solid #333;
+    color: #fff;
+    border-radius: 8px;
+    outline: none;
+}
+
+input:focus { border-color: #00f2ff; box-shadow: 0 0 5px #00f2ff; }
+
+/* NÚT BẤM */
+.btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Orbitron';
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+}
+
+.btn-p { background: #00f2ff; color: #000; }
+.btn-s { background: #7000ff; color: #fff; margin-top: 8px; }
+.btn:active { transform: scale(0.95); }
+
+/* LỊCH SỬ GIAO DỊCH */
+.history-item {
+    background: #1a1a1a;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    border-left: 3px solid #7000ff;
+}
+
+/* MENU ADMIN */
+#admin-section {
+    border: 2px dashed #ff4444;
+    background: #1a0000;
+}
+        
         
     </style>
 </head>
@@ -27,124 +111,11 @@
         <span onclick="checkAdmin()" style="color: transparent; font-size: 9px; cursor: pointer;">Hệ thống Ming Fruit</span>
     </div>
     
-    /* TỔNG THỂ SHOP CHUYÊN NGHIỆP */
-body {
-    margin: 0;
-    padding: 15px;
-    background-color: #080808; /* Nền tối sâu */
-    background-image: 
-        radial-gradient(circle at 50% 50%, #1a1a2e 0%, #080808 100%);
-    color: #ffffff;
-    font-family: 'Quicksand', sans-serif;
-    min-height: 101vh; /* Mở khóa vuốt reload */
-    overflow-y: auto;
-    overflow-x: hidden;
-    line-height: 1.5;
-}
+    
 
-/* KHUNG CHỨA CHÍNH */
-.container {
-    max-width: 500px;
-    margin: 0 auto;
-    display: flex;
-    vertical-align: middle;
-    flex-direction: column;
-    gap: 20px;
-}
 
-/* THIẾT KẾ BOX CHUYÊN NGHIỆP */
-.box {
-    background: #121212;
-    border: 1px solid #222;
-    border-top: 3px solid #00f2ff; /* Viền trên màu Neon làm điểm nhấn */
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    transition: 0.3s;
-}
 
-.box:hover {
-    border-top-color: #7000ff; /* Đổi màu khi di chuột */
-    transform: translateY(-2px);
-}
 
-/* TIÊU ĐỀ TRONG BOX */
-.box h2, .box h3 {
-    font-family: 'Orbitron', sans-serif;
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 1.1rem;
-    margin-top: 0;
-    margin-bottom: 20px;
-    color: #00f2ff;
-    letter-spacing: 1px;
-    text-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
-}
-
-/* INPUT VÀ SELECT CHUYÊN NGHIỆP */
-input, select, textarea {
-    width: 100%;
-    padding: 12px 15px;
-    margin-bottom: 15px;
-    background: #1a1a1a;
-    border: 1px solid #333;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 0.9rem;
-    transition: 0.3s ease;
-}
-
-input:focus, select:focus {
-    border-color: #00f2ff;
-    outline: none;
-    background: #222;
-    box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
-}
-
-/* NÚT BẤM GAMING */
-.btn {
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-family: 'Orbitron', sans-serif;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: 0.3s;
-}
-
-.btn-p {
-    background: linear-gradient(90deg, #00f2ff, #0072ff);
-    color: #000;
-}
-
-.btn-p:hover {
-    filter: brightness(1.2);
-    box-shadow: 0 0 15px rgba(0, 242, 255, 0.5);
-}
-
-.btn-s {
-    background: #1a1a1a;
-    border: 1px solid #7000ff;
-    color: #7000ff;
-}
-
-.btn-s:hover {
-    background: #7000ff;
-    color: #fff;
-    box-shadow: 0 0 15px rgba(112, 0, 255, 0.4);
-}
-
-/* THÔNG TIN NGƯỜI DÙNG */
-.user-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 15px;
-    border-bottom: 1px dashed #333;
-    margin-bottom: 15px;
-}
     
 
 <header><div class="logo">MING FRUITS</div></header>
