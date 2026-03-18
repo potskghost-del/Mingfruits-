@@ -6,80 +6,240 @@
     <title>MING FRUITS - SHOP CÀY THUÊ</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
-/* 1. RESET TOÀN BỘ */
-:root { --p: #00f2ff; --s: #7000ff; --bg: #050505; --text: #fff; }
-* { box-sizing: border-box; font-family: 'Quicksand', sans-serif; margin: 0; padding: 0; }
-
-/* 2. THÂN WEB - ÉP RA GIỮA & MỞ KHÓA VUỐT */
-body {
-    background: var(--bg) !important;
-    color: var(--text) !important;
-    min-height: 101vh !important; /* Luôn cao hơn màn hình để vuốt được reload */
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important; /* ÉP NỘI DUNG RA GIỮA MÀN HÌNH */
-    padding: 15px 10px !important;
-    overflow-y: auto !important; /* PHẢI có cái này mới vuốt được */
-    overflow-x: hidden !important;
+    
+        /* =========================================================
+   1. CÀI ĐẶT CHUNG & BẢNG MÀU GAMING NEON (ĐẸP HƠN)
+   ========================================================= */
+:root { 
+    --p: #00f2ff; /* Xanh Neon Cyan - Chính */
+    --s: #7000ff; /* Tím Neon Purple - Phụ */
+    --success: #00ff88; /* Xanh lá Neon - Thành công */
+    --warning: #ff9800; /* Cam Neon - Chờ duyệt */
+    --danger: #ff4444; /* Đỏ Neon - Hủy đơn/Admin */
+    --bg: #050505; /* Nền tối sâu */
+    --card: #121212; /* Nền của các ô dịch vụ */
+    --text: #ffffff; /* Chữ trắng */
 }
 
-/* Xóa sạch dấu vết nền rồng */
+* { 
+    box-sizing: border-box; 
+    font-family: 'Quicksand', sans-serif; 
+    margin: 0; padding: 0; 
+    /* YÊU CẦU 2: Làm cho tất cả chữ đậm hơn mặc định */
+    font-weight: 700; 
+}
+
+/* =========================================================
+   2. THÂN WEB - MỞ KHÓA VUỐT & XOÁ KHOẢNG TRỐNG
+   ========================================================= */
+body {
+    background-color: var(--bg);
+    background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #050505 100%); /* Tạo chiều sâu nền */
+    color: var(--text);
+    
+    /* Mở khóa vuốt màn hình để reload trang */
+    min-height: 101vh; 
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch;
+
+    /* Căn giữa toàn bộ shop ra giữa màn hình */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 10px !important;
+    position: relative;
+}
+
+/* Bỏ hoàn toàn nền rồng chuyển động cũ */
 body::before { display: none !important; content: none !important; }
 
-/* 3. KHUNG CHỨA - XOÁ TRỐNG ĐEN */
+/* =========================================================
+   3. KHUNG CHỨA SHOP - BỐ CỤC RÕ RÀNG (CHÍNH GIỮA)
+   ========================================================= */
 .container {
-    width: 100% !important;
-    max-width: 500px !important; /* Độ rộng shop chuẩn */
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 15px !important;
+    width: 100%;
+    max-width: 500px; /* Độ rộng chuẩn shop mobile */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Tạo khoảng cách rõ ràng giữa các phần */
+    padding-bottom: 40px;
 }
 
-/* 4. CÁC Ô DỊCH VỤ - CHUYÊN NGHIỆP */
+/* =========================================================
+   4. THIẾT KẾ CÁC BOX - YÊU CẦU 1: VIỀN BO TRÒN XUNG QUANH
+   ========================================================= */
 .box {
-    width: 100% !important;
-    background: #111 !important;
-    border: 1px solid #222 !important;
-    border-top: 3px solid var(--p) !important;
-    border-radius: 12px !important;
-    padding: 20px !important;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5) !important;
+    width: 100%;
+    background: var(--card);
+    /* YÊU CẦU 1: VIỀN BO TRÒN */
+    border-radius: 15px; 
+    padding: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.05); /* Viền mờ bao quanh */
+    border-top: 3px solid var(--p); /* Viền trên Neon làm điểm nhấn */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); /* Bóng đổ tạo khối */
+    transition: 0.3s ease;
 }
 
-/* 5. INPUT & NÚT BẤM - TO RÕ RÀNG */
+/* Hiệu ứng khi di chuột vào khối (trên PC) */
+.box:hover {
+    border-top-color: var(--s); /* Đổi màu viền trên sang tím */
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+}
+
+/* =========================================================
+   5. TIÊU ĐỀ & CHỮ TRONG BOX - YÊU CẦU 2 & 3: ĐẬM & MÀU ĐẸP
+   ========================================================= */
+header { text-align: center; padding: 20px 0; margin-bottom: 10px; }
+.logo { 
+    font-family: 'Orbitron'; 
+    font-size: 1.8rem; 
+    font-weight: 700;
+    color: var(--p); /* YÊU CẦU 3: MÀU ĐẸP RỰC RỠ */
+    text-shadow: 0 0 15px var(--p); 
+    letter-spacing: 2px; 
+    text-transform: uppercase;
+}
+
+.box h2, .box h3, .box h4 {
+    font-family: 'Orbitron';
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    font-weight: 700; /* YÊU CẦU 2: CHỮ ĐẬM */
+    margin-bottom: 20px;
+    color: var(--p); /* YÊU CẦU 3: MÀU XANH NEON */
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+}
+
+/* Ô tiền mặt đẹp hơn */
+.balance { 
+    color: var(--success) !important; 
+    font-family: 'Orbitron'; 
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-shadow: 0 0 10px var(--success);
+}
+
+/* =========================================================
+   6. INPUT & SELECT - BỐ CỤC RÕ RÀNG, DỄ NHÌN
+   ========================================================= */
 input, select, textarea {
-    width: 100% !important;
-    padding: 12px !important;
-    margin-bottom: 12px !important;
-    background: #000 !important;
-    border: 1px solid #333 !important;
-    color: #fff !important;
-    border-radius: 8px !important;
-    font-size: 16px !important; /* Chống bị zoom khi bấm trên điện thoại */
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 15px;
+    background: #000;
+    border: 1px solid #333;
+    color: #fff;
+    /* VIỀN BO TRÒN */
+    border-radius: 10px; 
+    outline: none;
+    font-size: 0.95rem;
+    font-weight: 700; /* YÊU CẦU 2: ĐẬM */
+    transition: 0.3s ease;
 }
 
+input:focus, select:focus {
+    border-color: var(--p);
+    background: #111;
+    box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+}
+
+/* =========================================================
+   7. NÚT BẤM GAMING STYLE - ĐẬM & MÀU RỰC RỠ
+   ========================================================= */
 .btn {
-    width: 100% !important;
-    padding: 14px !important;
-    border: none !important;
-    border-radius: 8px !important;
-    font-weight: bold !important;
-    cursor: pointer !important;
-    text-transform: uppercase !important;
-    font-family: 'Orbitron' !important;
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 10px; /* VIỀN BO TRÒN */
+    font-weight: 700; /* YÊU CẦU 2: CHỮ ĐẬM */
+    cursor: pointer;
+    text-transform: uppercase;
+    font-family: 'Orbitron';
+    transition: 0.3s;
+    letter-spacing: 1px;
 }
 
-.btn-p { background: var(--p) !important; color: #000 !important; }
-.btn-s { background: var(--s) !important; color: #fff !important; }
+.btn-p { 
+    background: linear-gradient(90deg, #00f2ff, #0072ff); 
+    color: #000; 
+    box-shadow: 0 0 15px rgba(0, 242, 255, 0.5); /* YÊU CẦU 3: MÀU ĐẸP RỰC RỠ */
+}
 
-/* LOGO */
-header { text-align: center; padding: 15px 0; }
-.logo { font-family: 'Orbitron'; font-size: 1.8rem; color: var(--p); text-shadow: 0 0 15px var(--p); }
+.btn-s { 
+    background: #1a1a1a;
+    border: 1px solid var(--s);
+    color: var(--s); 
+    box-shadow: 0 0 10px rgba(112, 0, 255, 0.3); 
+}
+
+.btn:active { transform: scale(0.96); }
+
+/* =========================================================
+   8. LỊCH SỬ GIAO DỊCH - BỐ CỤC CHUYÊN NGHIỆP
+   ========================================================= */
+#history-list {
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.history-item {
+    font-size: 0.85rem;
+    background: #1a1a1a;
+    padding: 12px;
+    border-radius: 8px; /* VIỀN BO TRÒN */
+    margin-bottom: 10px;
+    border-left: 3px solid var(--s); /* Điểm nhấn tím */
+    color: #ccc;
+    font-weight: 700; /* YÊU CẦU 2: ĐẬM */
+    transition: 0.2s;
+}
+
+.history-item:hover {
+    background: #222;
+    transform: translateX(2px);
+}
+
+/* =========================================================
+   9. MENU ADMIN - VIỀN BO ĐẶC BIỆT
+   ========================================================= */
+#admin-section {
+    /* YÊU CẦU 1: VIỀN BO TRÒN ĐẶC BIỆT */
+    border: 2px dashed var(--danger) !important; 
+    background: rgba(26, 0, 0, 0.9);
+    border-top: none !important;
+    border-radius: 15px;
+}
+
+#admin-section h3 {
+    color: var(--danger) !important;
+    text-shadow: 0 0 10px var(--danger);
+}
+
+/* CÁC THẺ TRẠNG THÁI TRONG LỊCH SỬ */
+.tag-pending { color: var(--warning); font-weight: 700; }
+.tag-done { color: var(--success); font-weight: 700; }
+.tag-card { color: #ff00ea; font-weight: 700; }
+.tag-system { color: #00ffff; font-weight: 700; }
 
 .hidden { display: none !important; }
-.history-item { background: #1a1a1a; padding: 10px; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid var(--s); }
+
+/* Hiệu ứng chữ cho giá tiền khi chọn dịch vụ */
+.price-display {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 1.5rem;
+    color: var(--p);
+    font-weight: 700; /* YÊU CẦU 2: ĐẬM */
+    font-family: 'Orbitron';
+    text-shadow: 0 0 10px var(--p);
+}
+</style>
     
-        
     </style>
 </head>
 <body>
