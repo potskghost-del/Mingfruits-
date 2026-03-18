@@ -230,13 +230,47 @@
         const log = `<span class="tag-card">[NẠP THẺ]</span> ${type} ${parseInt(val).toLocaleString()}đ (Thành công)`;
         data.history.unshift(log);
     // data.balance += parseInt(val); // Xóa hoặc thêm dấu // ở đầu để chặn cộng tiền ngay
-const log = `<span style="color: #ff9800;">[CHỜ DUYỆT]</span> ${type} ${parseInt(val).toLocaleString()}đ - Đang kiểm tra`;
-data.history.unshift(log); // Lưu dòng chờ duyệt vào lịch sử khách
-localStorage.setItem(currentUser, JSON.stringify(data));
-alert("Gửi thẻ thành công! Vui lòng chờ Admin kiểm tra và cộng tiền.");
-location.reload(); // Load lại trang để khách thấy chữ "Chờ duyệt"
-        
+function adminAddMoney() {
+    const target = document.getElementById('admin-target-user').value.trim();
+    const amount = parseInt(document.getElementById('admin-amount').value);
+    
+    // Kiểm tra nếu admin nhập thiếu
+    if (!target || isNaN(amount)) {
+        alert("⚠️ LỖI: Bạn chưa nhập tên khách hoặc số tiền!");
+        return;
+    }
 
+    let userData = localStorage.getItem(target);
+    
+    if (userData) {
+        let data = JSON.parse(userData);
+        
+        // 1. Cộng tiền
+        data.balance += amount; 
+        
+        // 2. Tự động đổi trạng thái trong lịch sử từ Cam sang Xanh
+        if (data.history && data.history.length > 0) {
+            data.history = data.history.map(item => 
+                item.replace('[CHỜ DUYỆT]', '<b style="color: #00ff88;">[ĐÃ XONG]</b>')
+            );
+        }
+
+        // 3. Thêm dòng xác nhận hệ thống
+        data.history.unshift(`<span style="color: #00ff88;">[HỆ THỐNG]</span> +${amount.toLocaleString()}đ (Thành công)`);
+        
+        localStorage.setItem(target, JSON.stringify(data));
+        alert("✅ ĐÃ XỬ LÝ: Tài khoản " + target + " đã nhận được tiền!");
+        
+        // Reset ô nhập để làm tiếp ca khác
+        document.getElementById('admin-target-user').value = "";
+        document.getElementById('admin-amount').value = "";
+        
+        if(currentUser === target) location.reload();
+    } else {
+        // Báo lỗi nếu Admin gõ sai tên tài khoản khách
+        alert("❌ SAI TÊN: Không có ai tên là '" + target + "' cả. Kiểm tra lại đi Admin ơi!");
+    }
+        }
     function loadHistory() {
         const data = JSON.parse(localStorage.getItem(currentUser));
         const list = document.getElementById('history-list');
