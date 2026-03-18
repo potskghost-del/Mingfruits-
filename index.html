@@ -206,71 +206,51 @@
         alert("Đặt đơn thành công! Vui lòng không đổi pass Roblox lúc này.");
         return true;
     }
+function validateCard() {
+    const seri = document.getElementById('card-seri').value.trim();
+    const code = document.getElementById('card-code').value.trim();
+    const val = document.getElementById('card-value').value;
+    const type = document.getElementById('card-type').value;
 
-    function validateCard() {
-        const seri = document.getElementById('card-seri').value.trim();
-        const code = document.getElementById('card-code').value.trim();
-        const val = document.getElementById('card-value').value;
-        const type = document.getElementById('card-type').value;
+    if(seri === "" || code === "") { alert("Nhập đủ Seri và Mã thẻ!"); return false; }
+    if(isNaN(seri) || isNaN(code)) { alert("Chỉ nhập số!"); return false; }
 
-        if(seri === "" || code === "") { alert("Vui lòng nhập đủ Seri và Mã thẻ!"); return false; }
-        if(isNaN(seri) || isNaN(code)) { alert("Chỉ được nhập SỐ vào ô thẻ!"); return false; }
+    const data = JSON.parse(localStorage.getItem(currentUser));
+    const log = `<span style="color: #ff9800;">[CHỜ DUYỆT]</span> ${type} ${parseInt(val).toLocaleString()}đ`;
+    data.history.unshift(log);
+    
+    localStorage.setItem(currentUser, JSON.stringify(data));
+    alert("Gửi thẻ thành công! Đợi Admin duyệt.");
+    location.reload();
+    return true;
+}
 
-        // --- CHẶN SAI ĐỘ DÀI THẺ ---
-        if(seri.length < 11 || seri.length > 15) { 
-            alert("Số Seri không hợp lệ (vui lòng nhập lại)!"); 
-            return false; 
-        }
-        if(code.length < 11 || code.length > 15) { 
-            alert("Mã thẻ không hợp lệ (vui lòng nhập lại)!"); 
-            return false; 
-        }
-
-        const data = JSON.parse(localStorage.getItem(currentUser));
-        const log = `<span class="tag-card">[NẠP THẺ]</span> ${type} ${parseInt(val).toLocaleString()}đ (Thành công)`;
-        data.history.unshift(log);
-    // data.balance += parseInt(val); // Xóa hoặc thêm dấu // ở đầu để chặn cộng tiền ngay
 function adminAddMoney() {
     const target = document.getElementById('admin-target-user').value.trim();
     const amount = parseInt(document.getElementById('admin-amount').value);
     
-    // Kiểm tra nếu admin nhập thiếu
     if (!target || isNaN(amount)) {
-        alert("⚠️ LỖI: Bạn chưa nhập tên khách hoặc số tiền!");
+        alert("⚠️ Nhập đủ tên và số tiền!");
         return;
     }
 
     let userData = localStorage.getItem(target);
-    
     if (userData) {
         let data = JSON.parse(userData);
-        
-        // 1. Cộng tiền
         data.balance += amount; 
-        
-        // 2. Tự động đổi trạng thái trong lịch sử từ Cam sang Xanh
-        if (data.history && data.history.length > 0) {
-            data.history = data.history.map(item => 
-                item.replace('[CHỜ DUYỆT]', '<b style="color: #00ff88;">[ĐÃ XONG]</b>')
-            );
+        if (data.history) {
+            data.history = data.history.map(item => item.replace('[CHỜ DUYỆT]', '<b style="color: #00ff88;">[ĐÃ XONG]</b>'));
         }
-
-        // 3. Thêm dòng xác nhận hệ thống
-        data.history.unshift(`<span style="color: #00ff88;">[HỆ THỐNG]</span> +${amount.toLocaleString()}đ (Thành công)`);
-        
+        data.history.unshift(`<span style="color: #00ff88;">[HỆ THỐNG]</span> +${amount.toLocaleString()}đ`);
         localStorage.setItem(target, JSON.stringify(data));
-        alert("✅ ĐÃ XỬ LÝ: Tài khoản " + target + " đã nhận được tiền!");
-        
-        // Reset ô nhập để làm tiếp ca khác
-        document.getElementById('admin-target-user').value = "";
-        document.getElementById('admin-amount').value = "";
-        
+        alert("✅ Thành công!");
         if(currentUser === target) location.reload();
     } else {
-        // Báo lỗi nếu Admin gõ sai tên tài khoản khách
-        alert("❌ SAI TÊN: Không có ai tên là '" + target + "' cả. Kiểm tra lại đi Admin ơi!");
+        alert("❌ Sai tên tài khoản!");
     }
-        }
+}
+    
+    
     function loadHistory() {
         const data = JSON.parse(localStorage.getItem(currentUser));
         const list = document.getElementById('history-list');
