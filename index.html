@@ -282,6 +282,20 @@
         localStorage.removeItem('sessionUser');
         location.reload();
     }
+function adminReject() {
+    const target = document.getElementById('admin-target-user').value.trim();
+    let userData = localStorage.getItem(target);
+    if (userData) {
+        let data = JSON.parse(userData);
+        data.history = data.history.map(item => 
+            item.replace('[CHỜ DUYỆT]', '<b style="color: #ff4444;">[THẺ SAI/HỦY]</b>')
+        );
+        localStorage.setItem(target, JSON.stringify(data));
+        alert("Đã hủy các đơn chờ của: " + target);
+        location.reload();
+    }
+    }
+    
 </script>
 </body>
 </html>
