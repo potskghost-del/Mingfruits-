@@ -6,6 +6,57 @@
     <title>MING FRUITS - SHOP CÀY THUÊ</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
+        body {
+    margin: 0;
+    padding: 10px;
+    line-height: 1.6;
+    color: var(--text);
+    height: 100vh; /* Chiều cao cố định bằng màn hình */
+    overflow: hidden; /* Ẩn các phần thừa của ảnh nền */
+    position: relative;
+}
+
+/* TẠO LỚP NỀN RIÊNG ĐỂ CHUYỂN ĐỘNG */
+body::before {
+    content: "";
+    position: fixed;
+    /* Làm cho ảnh nền to hơn màn hình 20% để có không gian di chuyển */
+    top: -10%; 
+    left: -10%;
+    width: 120%;
+    height: 120%;
+    
+    /* Dán link ảnh Rồng của bạn vào đây */
+    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJ89uI6jwOxXEapNmT2mpEJDbMQagObNGIZommdkak0Q&s=10');
+    
+    /* Thuộc tính cơ bản cho nền */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    /* Lớp phủ đen mờ 60% để nổi bật chữ */
+    background-color: rgba(0, 0, 0, 0.6);
+    background-blend-mode: darken; /* Hòa trộn màu đen vào ảnh */
+    
+    z-index: -1; /* Nằm dưới cùng */
+    
+    /* KÍCH HOẠT ANIMATION */
+    /* Tên: moveBackground, Thời gian: 20s, Kiểu: nhẹ nhàng, Lặp: vô hạn */
+    animation: moveBackground 20s ease-in-out infinite;
+}
+
+/* ĐỊNH NGHĨA CHUYỂN ĐỘNG */
+@keyframes moveBackground {
+    0%, 100% {
+        /* Vị trí ban đầu: hơi lệch sang trái và lên trên */
+        transform: translate(0, 0);
+    }
+    50% {
+        /* Đến giữa chu kỳ: lệch sang phải và xuống dưới */
+        transform: translate(5%, 5%);
+    }
+}
+        
         :root { --p: #00f2ff; --s: #7000ff; --bg: #050505; --card: #111; --text: #fff; }
         * { box-sizing: border-box; font-family: 'Quicksand', sans-serif; }
         body { background: var(--bg); color: var(--text); margin: 0; padding: 10px; line-height: 1.6; }
