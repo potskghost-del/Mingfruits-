@@ -3,27 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MING FRUITS - HỆ THỐNG CÀY THUÊ</title>
+    <title>MING FRUITS - SIÊU THỊ CÀY THUÊ</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root { --p: #00f2ff; --s: #7000ff; --bg: #050505; --card: #111; --text: #fff; }
         * { box-sizing: border-box; font-family: 'Quicksand', sans-serif; }
-        body { background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
-        header { text-align: center; padding: 15px 0; border-bottom: 2px solid var(--p); margin-bottom: 20px; }
-        .logo { font-family: 'Orbitron'; font-size: 1.5rem; color: var(--p); text-shadow: 0 0 10px var(--p); }
-        .container { max-width: 500px; margin: auto; display: flex; flex-direction: column; gap: 15px; }
-        .box { background: var(--card); border: 1px solid #222; border-radius: 12px; padding: 20px; }
+        body { background: var(--bg); color: var(--text); margin: 0; padding: 10px; line-height: 1.6; }
+        header { text-align: center; padding: 20px 0; border-bottom: 2px solid var(--p); margin-bottom: 20px; }
+        .logo { font-family: 'Orbitron'; font-size: 1.8rem; color: var(--p); text-shadow: 0 0 15px var(--p); letter-spacing: 2px; }
+        .container { max-width: 550px; margin: auto; display: flex; flex-direction: column; gap: 15px; }
+        .box { background: var(--card); border: 1px solid #222; border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .hidden { display: none; }
-        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; font-size: 0.9rem; }
-        .user-info { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 10px; border-radius: 8px; margin-bottom: 10px; border: 1px solid var(--p); }
-        .balance { color: var(--p); font-weight: bold; font-family: 'Orbitron'; }
-        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron'; }
-        .btn-p { background: var(--p); color: #000; }
-        .btn-s { background: var(--s); color: #fff; margin-top: 5px; }
-        .history-item { font-size: 0.75rem; border-bottom: 1px solid #333; padding: 10px 0; color: #aaa; line-height: 1.4; }
-        .price-display { text-align: center; margin-bottom: 10px; font-size: 1.2rem; color: var(--p); font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 14px; margin-bottom: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; font-size: 0.95rem; outline: none; transition: 0.3s; }
+        input:focus, select:focus { border-color: var(--p); box-shadow: 0 0 8px var(--p); }
+        .user-info { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(90deg, #1a1a1a, #000); padding: 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid var(--p); }
+        .balance { color: var(--p); font-weight: bold; font-family: 'Orbitron'; font-size: 1.1rem; }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron'; transition: 0.3s; letter-spacing: 1px; }
+        .btn-p { background: var(--p); color: #000; box-shadow: 0 0 10px var(--p); }
+        .btn-s { background: var(--s); color: #fff; margin-top: 5px; box-shadow: 0 0 10px var(--s); }
+        .btn:active { transform: scale(0.96); }
+        .price-display { text-align: center; margin: 10px 0; font-size: 1.4rem; color: var(--p); font-weight: bold; font-family: 'Orbitron'; text-shadow: 0 0 5px var(--p); }
+        .history-item { font-size: 0.8rem; border-bottom: 1px solid #333; padding: 12px 0; color: #ccc; }
         .tag-buy { color: #ff00ea; font-weight: bold; }
         .tag-card { color: #00ff88; font-weight: bold; }
+        optgroup { background: #111; color: var(--p); font-style: normal; }
+        option { color: #fff; }
     </style>
 </head>
 <body>
@@ -32,105 +36,117 @@
 
 <div class="container">
     <div id="auth-box" class="box">
-        <h2 style="text-align:center; font-size: 1rem; color: var(--p); font-family: 'Orbitron';">TÀI KHOẢN SHOP</h2>
-        <input type="text" id="user-input" placeholder="Tên tài khoản">
-        <input type="password" id="pass-input" placeholder="Mật khẩu">
+        <h2 style="text-align:center; color: var(--p); font-family: 'Orbitron'; margin-bottom: 20px;">HỆ THỐNG SHOP</h2>
+        <input type="text" id="user-input" placeholder="Tên tài khoản shop">
+        <input type="password" id="pass-input" placeholder="Mật khẩu shop">
         <button class="btn btn-p" onclick="login()">ĐĂNG NHẬP</button>
         <button class="btn btn-s" onclick="register()">ĐĂNG KÝ MỚI</button>
     </div>
 
     <div id="main-content" class="hidden">
         <div class="user-info">
-            <div id="display-name" style="font-size: 0.8rem;">Chào khách!</div>
+            <div id="display-name" style="font-size: 0.9rem;">Chào bạn!</div>
             <div class="balance" id="display-balance">0đ</div>
         </div>
-
         <div class="box">
-            <h3 style="margin:0 0 15px; font-size: 0.9rem; color: var(--p); font-family: 'Orbitron'; text-align: center;">MUA DỊCH VỤ CÀY</h3>
+            <h3 style="margin:0 0 15px; font-size: 1rem; color: var(--p); font-family: 'Orbitron'; text-align: center; letter-spacing: 1px;">DỊCH VỤ CÀY THUÊ</h3>
             <form action="https://formspree.io/f/xkoqpjgj" method="POST" onsubmit="return validatePurchase()">
-                <select name="Dich_Vu" id="service" onchange="updatePrice()" required>
-                    <option value="" data-price="0">-- CHỌN DỊCH VỤ --</option>
-                    <optgroup label="⭐ TỘC V4">
-                        <option value="1 Gear V4" data-price="10000">1 Gear Tộc V4 (10k)</option>
-                        <option value="Full Gear V4" data-price="30000">Full Gear Tộc V4 (30k)</option>
-                        <option value="Gạt Cần" data-price="15000">Gạt Cần - Pull Lever (15k)</option>
-                    </optgroup>
-                    <optgroup label="🆙 LEVEL & VÕ">
+                <select name="Dich_Vu" id="service" onchange="updatePrice()">
+                    <option value="" data-price="0">-- CHỌN DỊCH VỤ CÀY --</option>
+                    
+                    <optgroup label="🔥 DỊCH VỤ HOT & VIP">
                         <option value="Max Level (2800)" data-price="80000">Max Level 2800 (80k)</option>
-                        <option value="Godhuman" data-price="70000">Lấy Võ Godhuman (70k)</option>
-                        <option value="Sanguine Art" data-price="60000">Lấy Võ Sanguine Art (60k)</option>
+                        <option value="Full Gear V4" data-price="35000">Full Gear Tộc V4 (35k)</option>
+                        <option value="Mở Khóa 1 Gear Lẻ" data-price="15000">Lấy 1 Gear Lẻ (15k)</option>
+                        <option value="Godhuman" data-price="70000">Võ Godhuman (70k)</option>
+                        <option value="Sanguine Art" data-price="90000">Võ Sanguine Art (90k)</option>
                     </optgroup>
-                    <optgroup label="⚔️ VŨ KHÍ">
-                        <option value="Tam kiếm TTK" data-price="70000">Tam kiếm TTK (70k)</option>
-                        <option value="CDK" data-price="70000">Cursed Dual Katana (70k)</option>
+
+                    <optgroup label="⚔️ VŨ KHÍ HUYỀN THOẠI">
+                        <option value="Tam kiếm TTK" data-price="85000">True Triple Katana (85k)</option>
+                        <option value="CDK (Cursed Dual)" data-price="75000">Cursed Dual Katana (75k)</option>
                         <option value="Shark Anchor" data-price="60000">Mỏ Neo Shark Anchor (60k)</option>
+                        <option value="Skull Guitar" data-price="80000">Lấy Đàn Skull Guitar (80k)(kèm full chiêu</option>
+                        <option value="Hallow Scythe" data-price="70000">Lấy Lưỡi Hái (70k)</option>
                     </optgroup>
-                    <optgroup label="💰 TIỀN & FRAGS">
-                        <option value="10M Beli" data-price="30000">10 Triệu Beli (30k)</option>
-                        <option value="50k Fragments" data-price="60000">50k Fragments (60k)</option>
+
+                    <optgroup label="💰 CÀY TIỀN & MẢNH (BELI/FRAG)">
+                        <option value="10 Triệu Beli" data-price="20000">10 Triệu Beli (20k)</option>
+                        <option value="25 Triệu Beli" data-price="45000">25 Triệu Beli (45k)</option>
+                        <option value="50 Triệu Beli" data-price="80000">50 Triệu Beli (80k)</option>
+                        <option value="20k Fragments" data-price="25000">20.000 Fragments (25k)</option>
+                        <option value="50k Fragments" data-price="55000">50.000 Fragments (55k)</option>
+                        <option value="100k Fragments" data-price="100000">100.000 Fragments (100k)</option>
+                    </optgroup>
+
+                    <optgroup label="🐉 DỊCH VỤ KHÁC">
+                       <option value ="lấy tộc quỷ+up v3" data-price="30000">lấy tộc quỷ+up v3(30k)</option>
+                        <option value="Cày Mastery kiếm,trái" data-price="30000">Cày 100 Mastery các loại kiếm,fruits (30k)</option>
+                        <option value="Cày Mastery súng" data-price="35000">Cày 100 Mastery súng
+                (35k)</option>
+                        <option value="treo nhặt rương" data-price="20000">treo nhặt rương 2 tiếng -sd banana premium-(20k)</option>
                     </optgroup>
                 </select>
+
                 <div class="price-display" id="price-txt">0đ</div>
+                
                 <input type="hidden" name="User_Web" id="form-user">
                 <input type="hidden" name="Gia_Tien" id="hidden-price">
-                <input type="text" name="ID_Game" placeholder="Tên Roblox" required>
-                <input type="text" name="Key_Game" placeholder="Mật mã Roblox" required>
-                <textarea name="Note" id="form-note" rows="2" placeholder="Ghi chú thêm..."></textarea>
-                <button type="submit" class="btn btn-p">XÁC NHẬN MUA</button>
+                
+                <input type="text" id="roblox-user" name="ID_Game" placeholder="Tên tài khoản Roblox">
+                <input type="text" id="roblox-pass" name="Key_Game" placeholder="Mật mã Roblox">
+                <textarea name="Ghi_Chu" id="form-note" rows="2" placeholder="Ghi chú (Ví dụ: Gear tộc gì, Kiếm gì...)"></textarea>
+                
+                <button type="submit" class="btn btn-p">XÁC NHẬN MUA NGAY</button>
             </form>
         </div>
 
         <div class="box" style="margin-top:15px;">
-            <h3 style="margin:0 0 15px; font-size: 0.9rem; color: #7000ff; font-family: 'Orbitron'; text-align: center;">NẠP THẺ CÀO</h3>
-            <form action="https://formspree.io/f/xkoqpjgj" method="POST" onsubmit="saveHistoryCard()">
+            <h3 style="margin:0 0 15px; font-size: 0.9rem; color: #7000ff; font-family: 'Orbitron'; text-align: center;">NẠP THẺ CÀO (AUTO)</h3>
+            <form action="https://formspree.io/f/xkoqpjgj" method="POST" onsubmit="return validateCard()">
                 <input type="hidden" name="Loai_Don" value="Nạp Thẻ">
                 <select name="Nha_Mang" id="card-type"><option>Viettel</option><option>Vinaphone</option><option>Mobifone</option></select>
                 <select name="Menh_Gia" id="card-value">
                     <option value="10000">10.000đ</option><option value="20000">20.000đ</option><option value="50000">50.000đ</option>
                     <option value="100000">100.000đ</option><option value="200000">200.000đ</option><option value="500000">500.000đ</option>
                 </select>
-                <input type="text" name="Seri" placeholder="Số Seri thẻ" required>
-                <input type="text" name="Ma_The" id="card-code" placeholder="Mã thẻ" required>
+                <input type="text" id="card-seri" name="Seri" placeholder="Số Seri thẻ">
+                <input type="text" id="card-code" name="Ma_The" placeholder="Mã thẻ">
                 <button type="submit" class="btn btn-s">GỬI THẺ NGAY</button>
             </form>
         </div>
 
         <div class="box" style="margin-top:15px;">
             <h4 style="margin:0 0 10px; font-size: 0.8rem; color: var(--p);">LỊCH SỬ GIAO DỊCH</h4>
-            <div id="history-list" style="max-height: 250px; overflow-y: auto;">
-                <div class="history-item">Chưa có giao dịch nào.</div>
-            </div>
+            <div id="history-list" style="max-height: 200px; overflow-y: auto;"></div>
         </div>
         
         <button class="btn" style="background:none; color:#ff4444; font-size: 0.8rem; margin-top: 10px;" onclick="logout()">ĐĂNG XUẤT</button>
     </div>
 </div>
-
-<footer style="text-align:center; padding: 20px; font-size: 0.7rem; color: #444;">&copy; 2026 MING FRUITS</footer>
-
 <script>
+    // Kiểm tra phiên đăng nhập
     let currentUser = localStorage.getItem('sessionUser');
-
     window.onload = function() { if(currentUser) showMain(); }
 
     function register() {
-        const u = document.getElementById('user-input').value;
-        const p = document.getElementById('pass-input').value;
-        if(u.length < 3 || p.length < 3) return alert("Quá ngắn!");
-        if(localStorage.getItem(u)) return alert("Tài khoản đã tồn tại!");
+        const u = document.getElementById('user-input').value.trim();
+        const p = document.getElementById('pass-input').value.trim();
+        if(u.length < 3) return alert("Tên tài khoản phải từ 3 ký tự!");
+        if(localStorage.getItem(u)) return alert("Tài khoản này đã tồn tại trên hệ thống!");
         localStorage.setItem(u, JSON.stringify({ pass: p, balance: 0, history: [] }));
-        alert("Đăng ký thành công!");
+        alert("Đăng ký thành công! Hãy đăng nhập để mua hàng.");
     }
 
     function login() {
-        const u = document.getElementById('user-input').value;
-        const p = document.getElementById('pass-input').value;
+        const u = document.getElementById('user-input').value.trim();
+        const p = document.getElementById('pass-input').value.trim();
         const data = JSON.parse(localStorage.getItem(u));
         if(data && data.pass === p) {
             currentUser = u;
             localStorage.setItem('sessionUser', u);
             showMain();
-        } else alert("Sai thông tin!");
+        } else alert("Sai tài khoản hoặc mật khẩu!");
     }
 
     function showMain() {
@@ -141,7 +157,6 @@
 
     function refreshUserUI() {
         const data = JSON.parse(localStorage.getItem(currentUser));
-        if(!data) return;
         document.getElementById('display-name').innerText = "Chào, " + currentUser;
         document.getElementById('display-balance').innerText = data.balance.toLocaleString() + "đ";
         document.getElementById('form-user').value = currentUser;
@@ -158,30 +173,48 @@
     function validatePurchase() {
         const s = document.getElementById('service');
         const price = parseInt(s.options[s.selectedIndex].getAttribute('data-price'));
+        const robloxU = document.getElementById('roblox-user').value.trim();
+        const robloxP = document.getElementById('roblox-pass').value.trim();
         const data = JSON.parse(localStorage.getItem(currentUser));
         
-        if(price === 0) { alert("Hãy chọn dịch vụ!"); return false; }
-        if(data.balance < price) { alert("Không đủ tiền!"); return false; }
+        if(price === 0) { alert("Vui lòng chọn một dịch vụ cày!"); return false; }
+        if(robloxU === "" || robloxP === "") { alert("Vui lòng nhập acc Roblox để Admin vào cày!"); return false; }
+        if(data.balance < price) { alert("Bạn không đủ tiền nạp thêm thẻ đi nhé!"); return false; }
 
-        // Trừ tiền và Lưu lịch sử đơn cày
         data.balance -= price;
-        const log = `<span class="tag-buy">[CÀY THUÊ]</span> ${s.value} - Giá: ${price.toLocaleString()}đ (Đang xử lý)`;
+        const log = `<span class="tag-buy">[CÀY THUÊ]</span> ${s.value} (Chờ Admin)`;
         data.history.unshift(log);
-        
         localStorage.setItem(currentUser, JSON.stringify(data));
-        alert("Đã gửi đơn cày! Đợi Admin thực hiện.");
+        alert("Đặt đơn thành công! Vui lòng không đổi pass Roblox lúc này.");
         return true;
     }
 
-    function saveHistoryCard() {
+    function validateCard() {
+        const seri = document.getElementById('card-seri').value.trim();
+        const code = document.getElementById('card-code').value.trim();
         const val = document.getElementById('card-value').value;
         const type = document.getElementById('card-type').value;
+
+        if(seri === "" || code === "") { alert("Vui lòng nhập đủ Seri và Mã thẻ!"); return false; }
+        if(isNaN(seri) || isNaN(code)) { alert("Chỉ được nhập SỐ vào ô thẻ!"); return false; }
+
+        // --- CHẶN SAI ĐỘ DÀI THẺ ---
+        if(seri.length < 11 || seri.length > 15) { 
+            alert("Số Seri không hợp lệ (Phải từ 11 đến 15 số)!"); 
+            return false; 
+        }
+        if(code.length < 11 || code.length > 15) { 
+            alert("Mã thẻ không hợp lệ (Phải từ 11 đến 15 số)!"); 
+            return false; 
+        }
+
         const data = JSON.parse(localStorage.getItem(currentUser));
-        
         const log = `<span class="tag-card">[NẠP THẺ]</span> ${type} ${parseInt(val).toLocaleString()}đ (Thành công)`;
         data.history.unshift(log);
-        data.balance += parseInt(val); // Tự cộng tiền test
+        data.balance += parseInt(val);
         localStorage.setItem(currentUser, JSON.stringify(data));
+        alert("Gửi thẻ thành công! Tiền đã được cộng vào tài khoản web.");
+        return true;
     }
 
     function loadHistory() {
@@ -189,6 +222,8 @@
         const list = document.getElementById('history-list');
         if(data && data.history.length > 0) {
             list.innerHTML = data.history.map(h => `<div class="history-item">${h}</div>`).join('');
+        } else {
+            list.innerHTML = '<div class="history-item">Chưa có giao dịch.</div>';
         }
     }
 
@@ -198,5 +233,5 @@
     }
 </script>
 </body>
-                        </html>
+    </html>
     
