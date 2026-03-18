@@ -6,103 +6,30 @@
     <title>MING FRUITS - SHOP CÀY THUÊ</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        body {
+body {
     margin: 0;
     padding: 10px;
     line-height: 1.6;
     color: var(--text);
-    height: 100vh; /* Chiều cao cố định bằng màn hình */
-    overflow: hidden; /* Ẩn các phần thừa của ảnh nền */
+    background: #050505; /* Nền đen gaming đơn giản */
+    
+    /* QUAN TRỌNG: Mở khóa cuộn trang */
+    min-height: 101vh; /* Ép trang dài hơn màn hình 1 chút để vuốt được */
+    overflow-y: auto !important; 
+    overflow-x: hidden !important;
+    
+    /* Hỗ trợ vuốt mượt trên điện thoại */
+    -webkit-overflow-scrolling: touch;
     position: relative;
 }
-body {
-    margin: 0; 
-    padding: 10px; 
-    line-height: 1.6; 
-    color: var(--text);
-    min-height: 100vh; 
-    position: relative; 
-    /* XÓA dòng overflow: hidden; cũ đi */
-    overflow-x: hidden; /* Chỉ ẩn thanh cuộn ngang để không bị lệch ảnh */
-    background: #000;
-}
 
-/* HIỆU ỨNG NỀN RỒNG CHUYỂN ĐỘNG */
+/* Xóa bỏ hoàn toàn lớp phủ rồng cũ */
 body::before {
-    content: ""; 
-    position: fixed; /* Giữ cố định nền khi vuốt nội dung */
-    top: -10%; 
-    left: -10%; 
-    width: 120%; 
-    height: 120%;
-    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJ89uI6jwOxXEapNmT2mpEJDbMQagObNGIZommdkak0Q&s=10');
-    background-size: cover; 
-    background-position: center; 
-    z-index: -2;
-    filter: brightness(0.4);
-    animation: moveBackground 15s ease-in-out infinite;
-    /* Thêm dòng này để không bị chạm nhầm vào nền khi vuốt */
-    pointer-events: none; 
+    display: none !important;
+    content: none !important;
 }
         
         
-        :root { --p: #00f2ff; --s: #7000ff; --bg: #050505; --card: #111; --text: #fff; }
-        * { box-sizing: border-box; font-family: 'Quicksand', sans-serif; }
-        body { background: var(--bg); color: var(--text); margin: 0; padding: 10px; line-height: 1.6; }
-        header { text-align: center; padding: 20px 0; border-bottom: 2px solid var(--p); margin-bottom: 20px; }
-        .logo { font-family: 'Orbitron'; font-size: 1.8rem; color: var(--p); text-shadow: 0 0 15px var(--p); letter-spacing: 2px; }
-        .container { max-width: 550px; margin: auto; display: flex; flex-direction: column; gap: 15px; }
-        .box { 
-    background: rgba(10, 10, 10, 0.85); 
-    border: 1px solid transparent;
-    border-radius: 15px; 
-    padding: 20px; 
-    position: relative;
-    backdrop-filter: blur(10px); /* Hiệu ứng kính mờ */
-}
-
-.box::before {
-    content: "";
-    position: absolute;
-    top: -2px; left: -2px; right: -2px; bottom: -2px;
-    background: linear-gradient(45deg, #00f2ff, #7000ff, #00f2ff);
-    z-index: -1;
-    border-radius: 17px;
-    background-size: 400%;
-    animation: borderGlow 5s linear infinite;
-    opacity: 0.5;
-}
-
-@keyframes borderGlow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-        { background: var(--card); border: 1px solid #222; border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .hidden { display: none; }
-        input, select, textarea { width: 100%; padding: 14px; margin-bottom: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 10px; font-size: 0.95rem; outline: none; transition: 0.3s; }
-        input:focus, select:focus { border-color: var(--p); box-shadow: 0 0 8px var(--p); }
-        .user-info { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(90deg, #1a1a1a, #000); padding: 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid var(--p); }
-        .balance { color: var(--p); font-weight: bold; font-family: 'Orbitron'; font-size: 1.1rem; }
-        .btn { width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; text-transform: uppercase; font-family: 'Orbitron'; transition: 0.3s; letter-spacing: 1px; }
-        .btn-p { background: var(--p); color: #000; box-shadow: 0 0 10px var(--p); }
-        .btn-s { background: var(--s); color: #fff; margin-top: 5px; box-shadow: 0 0 10px var(--s); }
-        .btn:active { transform: scale(0.96); }
-        .price-display { text-align: center; margin: 10px 0; font-size: 1.4rem; color: var(--p); font-weight: bold; font-family: 'Orbitron'; text-shadow: 0 0 5px var(--p); }
-        .history-item { font-size: 0.8rem; border-bottom: 1px solid #333; padding: 12px 0; color: #ccc; }
-        .tag-buy { color: #ff00ea; font-weight: bold; }
-        .tag-card { color: #00ff88; font-weight: bold; }
-        optgroup { background: #111; color: var(--p); font-style: normal; }
-        option { color: #fff; }
-        body {
-    /* Lớp phủ đen mờ 70% để làm nổi bật chữ và bảng chọn */
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJ89uI6jwOxXEapNmT2mpEJDbMQagObNGIZommdkak0Q&s=10');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed; /* Giữ nền đứng yên khi cuộn trang */
-    color: var(--text);
-
     </style>
 </head>
 <body>
