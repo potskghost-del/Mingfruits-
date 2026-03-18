@@ -214,83 +214,92 @@
         return true;
     }
     function validateCard() {
-        const seri = document.getElementById('card-seri').value.trim();
-        const code = document.getElementById('card-code').value.trim();
-        const val = document.getElementById('card-value').value;
-        const type = document.getElementById('card-type').value;
+    const seri = document.getElementById('card-seri').value.trim();
+    const code = document.getElementById('card-code').value.trim();
+    const val = document.getElementById('card-value').value;
+    const type = document.getElementById('card-type').value;
 
-        if(seri === "" || code === "") { alert("Nhập đủ Seri và Mã thẻ!"); return false; }
-        if(isNaN(seri) || isNaN(code)) { alert("Chỉ nhập số!"); return false; }
+    if(seri === "" || code === "") { alert("Nhập đủ Seri và Mã thẻ!"); return false; }
 
-        const data = JSON.parse(localStorage.getItem(currentUser));
-        const log = `<span style="color: #ff9800;">[CHỜ DUYỆT]</span> ${type} ${parseInt(val).toLocaleString()}đ`;
-        data.history.unshift(log);
-        
-        localStorage.setItem(currentUser, JSON.stringify(data));
-        alert("Gửi thẻ thành công! Đợi Admin duyệt.");
-        location.reload();
-        return true;
-    }
+    const data = JSON.parse(localStorage.getItem(currentUser));
+    // Dòng này giúp hàm checkPendingMoney tìm thấy tiền chờ duyệt
+    const log = `<span style="color: #ff9800;">[CHỜ DUYỆT]</span> ${type} ${parseInt(val).toLocaleString()}đ`;
+    data.history.unshift(log);
+    
+    localStorage.setItem(currentUser, JSON.stringify(data));
+    alert("Gửi thẻ thành công! Đợi Admin duyệt.");
+    location.reload();
+    return true;
+}
 
-    function adminAddMoney() {
-        const target = document.getElementById('admin-target-user').value.trim();
-        const amount = parseInt(document.getElementById('admin-amount').value);
-        
-        if (!target || isNaN(amount)) {
-            alert("⚠️ Nhập đủ tên khách và số tiền!");
-            return;
+// ĐÂY LÀ HÀM QUAN TRỌNG ĐỂ HIỆN SỐ TIỀN CHỜ
+function checkPendingMoney() {
+    const target = document.getElementById('admin-target-user').value.trim();
+    const infoDiv = document.getElementById('admin-pending-info');
+    let userData = localStorage.getItem(target);
+
+    if (userData && infoDiv) {
+        let data = JSON.parse(userData);
+        let total = 0;
+        if (data.history) {
+            data.history.forEach(item => {
+                if (item.includes('[CHỜ DUYỆT]')) {
+                    let m = item.replace(/\./g, '').match(/\d+/);
+                    if (m) total += parseInt(m[0]);
+                }
+            });
         }
-
-        let userData = localStorage.getItem(target);
-        if (userData) {
-            let data = JSON.parse(userData);
-            data.balance += amount; 
-            
-            // Tự động đổi trạng thái từ [CHỜ DUYỆT] sang [ĐÃ XONG]
-            if (data.history) {
-                data.history = data.history.map(item => 
-                    item.replace('[CHỜ DUYỆT]', '<b style="color: #00ff88;">[ĐÃ XONG]</b>')
-                );
-            }
-            
-            data.history.unshift(`<span style="color: #00ff88;">[HỆ THỐNG]</span> +${amount.toLocaleString()}đ thành công!`);
-            localStorage.setItem(target, JSON.stringify(data));
-            
-            alert("✅ Đã cộng tiền và cập nhật lịch sử cho: " + target);
-            if(currentUser === target) location.reload();
-            
-            // Reset ô nhập
-            document.getElementById('admin-target-user').value = "";
-            document.getElementById('admin-amount').value = "";
+        if (total > 0) {
+            infoDiv.innerHTML = `💰 Đang nạp: ${total.toLocaleString()}đ`;
+            document.getElementById('admin-amount').value = total;
         } else {
-            alert("❌ Sai tên tài khoản! Không tìm thấy người này.");
+            infoDiv.innerHTML = "❌ Không có tiền chờ";
+            document.getElementById('admin-amount').value = "";
         }
+    } else if (infoDiv) {
+        infoDiv.innerHTML = "";
+    }
+}
+
+function adminAddMoney() {
+    const target = document.getElementById('admin-target-user').value.trim();
+    let amount = parseInt(document.getElementById('admin-amount').value);
+    
+    if (!target || isNaN(amount)) return alert("Nhập đủ tên và số tiền!");
+
+    let userData = localStorage.getItem(target);
+    if (userData) {
+        let data = JSON.parse(userData);
+        data.balance += amount;
+        
+        // Tự động duyệt các dòng chờ
+        if (data.history) {
+            data.history = data.history.map(item => 
+                item.replace('[CHỜ DUYỆT]', '<b style="color: #00ff88;">[ĐÃ XONG]</b>')
+            );
+        }
+        
+        data.history.unshift(`<span style="color: #00ff88;">[HỆ THỐNG]</span> +${amount.toLocaleString()}đ`);
+        localStorage.setItem(target, JSON.stringify(data));
+        alert("Đã xử lý xong cho: " + target);
+        location.reload();
+    } else {
+        alert("Không tìm thấy tài khoản!");
+    }
+}
+
+function loadHistory() {
+    const data = JSON.parse(localStorage.getItem(currentUser));
+    const list = document.getElementById('history-list');
+    if(data && data.history.length > 0) {
+        list.innerHTML = data.history.map(h => `<div class="history-item">${h}</div>`).join('');
+    } else {
+        list.innerHTML = '<div class="history-item">Chưa có giao dịch.</div>';
+    }
+}
+
+function checkAdmin() {
+    let p = prompt("Mã Admin:");
+    if(p === "123456") document.getElementById('admin-section').style.display = 'block';
     }
     
-    function loadHistory() {
-        const data = JSON.parse(localStorage.getItem(currentUser));
-        const list = document.getElementById('history-list');
-        if(data && data.history.length > 0) {
-            list.innerHTML = data.history.map(h => `<div class="history-item">${h}</div>`).join('');
-        } else {
-            list.innerHTML = '<div class="history-item">Chưa có giao dịch.</div>';
-        }
-    }
-
-    function logout() {
-        localStorage.removeItem('sessionUser');
-        location.reload();
-    }
-
-    function checkAdmin() {
-        let p = prompt("Mã Admin:");
-        if(p === "123456") {
-            document.getElementById('admin-section').style.display = 'block';
-            alert("Đã mở bảng Admin!");
-        } else {
-            alert("Sai mã rồi!");
-        }
-    }
-</script>
-</body>
-</html>
