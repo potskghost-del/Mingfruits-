@@ -239,6 +239,11 @@ body::before {
         <button class="btn" style="background:none; color:#ff4444; font-size: 0.8rem; margin-top: 10px;" onclick="logout()">ĐĂNG XUẤT</button>
     </div>
 </div>
+    <div style="display: flex; gap: 5px; margin-top: 5px;">
+    <button class="btn" style="background: #2196F3; color: #fff; flex: 1; font-size: 0.7rem;" onclick="adminStatus('ĐANG CÀY')">BẮT ĐẦU CÀY</button>
+    <button class="btn" style="background: #00ff88; color: #000; flex: 1; font-size: 0.7rem;" onclick="adminStatus('HOÀN THÀNH')">XONG ĐƠN</button>
+    </div>
+    
 <script>
     let currentUser = localStorage.getItem('sessionUser');
 
@@ -293,17 +298,21 @@ body::before {
     }
 
     function validatePurchase() {
-        const s = document.getElementById('service');
-        const price = parseInt(s.options[s.selectedIndex].getAttribute('data-price'));
-        const data = JSON.parse(localStorage.getItem(currentUser));
-        if(price === 0) { alert("Chọn dịch vụ!"); return false; }
-        if(data.balance < price) { alert("Không đủ tiền!"); return false; }
+    const s = document.getElementById('service');
+    const price = parseInt(s.options[s.selectedIndex].getAttribute('data-price'));
+    const data = JSON.parse(localStorage.getItem(currentUser));
+    if(price === 0) { alert("Chọn dịch vụ!"); return false; }
+    if(data.balance < price) { alert("Không đủ tiền!"); return false; }
 
-        data.balance -= price;
-        data.history.unshift(`<span class="tag-buy">[CÀY THUÊ]</span> ${s.value} (-${price.toLocaleString()}đ)`);
-        localStorage.setItem(currentUser, JSON.stringify(data));
-        return true;
+    data.balance -= price;
+    // Thêm chữ [ĐANG CHỜ] để admin còn biết mà duyệt
+    data.history.unshift(`<span style="color: #ff9800;">[ĐANG CHỜ]</span> ${s.value} (-${price.toLocaleString()}đ)`);
+    localStorage.setItem(currentUser, JSON.stringify(data));
+    refreshUserUI();
+    alert("Mua thành công! Vui lòng đợi Admin vào cày.");
+    return true;
     }
+    
 
     function validateCard() {
         const seri = document.getElementById('card-seri').value.trim();
