@@ -2,633 +2,897 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MING FRUITS - SHOP CÀY THUÊ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MING FRUITS | PREMIUM SERVICES</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-    
-        /* =========================================================
-   1. CÀI ĐẶT CHUNG & BẢNG MÀU GAMING NEON (ĐẸP HƠN)
-   ========================================================= */
-:root { 
-    --p: #00f2ff; /* Xanh Neon Cyan - Chính */
-    --s: #7000ff; /* Tím Neon Purple - Phụ */
-    --success: #00ff88; /* Xanh lá Neon - Thành công */
-    --warning: #ff9800; /* Cam Neon - Chờ duyệt */
-    --danger: #ff4444; /* Đỏ Neon - Hủy đơn/Admin */
-    --bg: #050505; /* Nền tối sâu */
-    --card: #121212; /* Nền của các ô dịch vụ */
-    --text: #ffffff; /* Chữ trắng */
-}
+        /* ==========================================================================
+           1. HỆ THỐNG BIẾN CORE (CORE VARIABLES)
+           ========================================================================== */
+        :root {
+            /* Tông màu chủ đạo: Cyan Neon & Purple Cyber */
+            --primary: #00f2ff;
+            --primary-glow: rgba(0, 242, 255, 0.5);
+            --secondary: #7000ff;
+            --secondary-glow: rgba(112, 0, 255, 0.5);
+            
+            /* Màu trạng thái */
+            --success: #00ff88;
+            --warning: #ffb300;
+            --danger: #ff3131;
+            
+            /* Nền và Bố cục chuyên nghiệp */
+            --bg-body: #050505;
+            --bg-card: rgba(15, 15, 15, 0.98);
+            --bg-input: #000000;
+            --border-color: rgba(255, 255, 255, 0.1);
+            
+            /* Typography */
+            --font-main: 'Quicksand', sans-serif;
+            --font-gaming: 'Orbitron', sans-serif;
+            
+            /* Bo tròn theo yêu cầu (20px) */
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
 
-* { 
-    box-sizing: border-box; 
-    font-family: 'Quicksand', sans-serif; 
-    margin: 0; padding: 0; 
-    /* YÊU CẦU 2: Làm cho tất cả chữ đậm hơn mặc định */
-    font-weight: 700; 
-}
+            /* Hiệu ứng chuyển cảnh */
+            --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-/* =========================================================
-   2. THÂN WEB - MỞ KHÓA VUỐT & XOÁ KHOẢNG TRỐNG
-   ========================================================= */
-body {
-    background-color: var(--bg);
-    background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #050505 100%); /* Tạo chiều sâu nền */
-    color: var(--text);
-    
-    /* Mở khóa vuốt màn hình để reload trang */
-    min-height: 101vh; 
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    -webkit-overflow-scrolling: touch;
+        /* ==========================================================================
+           2. RESET & BASE STYLES (CHỮ SIÊU ĐẬM)
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    /* Căn giữa toàn bộ shop ra giữa màn hình */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 15px 10px !important;
-    position: relative;
-}
+        body {
+            background-color: var(--bg-body);
+            color: #ffffff;
+            font-family: var(--font-main);
+            font-weight: 700; /* THIẾT LẬP CHỮ ĐẬM TOÀN HỆ THỐNG */
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            /* Nền Gradient mờ ảo */
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(0, 242, 255, 0.05) 0%, transparent 30%),
+                radial-gradient(circle at 90% 90%, rgba(112, 0, 255, 0.05) 0%, transparent 30%);
+        }
 
-/* Bỏ hoàn toàn nền rồng chuyển động cũ */
-body::before { display: none !important; content: none !important; }
+        .app-container {
+            width: 100%;
+            max-width: 480px; /* Chuẩn mobile gaming */
+            padding: 20px 15px;
+            position: relative;
+            z-index: 10;
+        }
 
-/* =========================================================
-   3. KHUNG CHỨA SHOP - BỐ CỤC RÕ RÀNG (CHÍNH GIỮA)
-   ========================================================= */
-.container {
-    width: 100%;
-    max-width: 500px; /* Độ rộng chuẩn shop mobile */
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* Tạo khoảng cách rõ ràng giữa các phần */
-    padding-bottom: 40px;
-}
+        /* Lớp phủ hiệu ứng hạt (Hàng trăm dòng CSS sau này sẽ dựa vào đây) */
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 5;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(0, 242, 255, 0.02) 50%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0.1;
+            position: fixed;
+            bottom: 100%;
+            pointer-events: none;
+        }
 
-/* =========================================================
-   4. THIẾT KẾ CÁC BOX - YÊU CẦU 1: VIỀN BO TRÒN XUNG QUANH
-   ========================================================= */
-.box {
-    width: 100%;
-    background: var(--card);
-    /* YÊU CẦU 1: VIỀN BO TRÒN */
-    border-radius: 15px; 
-    padding: 22px;
-    border: 1px solid rgba(255, 255, 255, 0.05); /* Viền mờ bao quanh */
-    border-top: 3px solid var(--p); /* Viền trên Neon làm điểm nhấn */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); /* Bóng đổ tạo khối */
-    transition: 0.3s ease;
-}
+        h1, h2, h3, .btn-text {
+            font-family: var(--font-gaming);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-/* Hiệu ứng khi di chuột vào khối (trên PC) */
-.box:hover {
-    border-top-color: var(--s); /* Đổi màu viền trên sang tím */
-    transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
-}
+        .hidden { display: none !important; }
+                /* ==========================================================================
+           3. HIỆU ỨNG BOX (BOX GLASS & GLOW) - BO TRÒN 20PX
+           ========================================================================== */
+        .box {
+            width: 100%;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+            margin-bottom: 20px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            transition: var(--transition);
+        }
 
-/* =========================================================
-   5. TIÊU ĐỀ & CHỮ TRONG BOX - YÊU CẦU 2 & 3: ĐẬM & MÀU ĐẸP
-   ========================================================= */
-header { text-align: center; padding: 20px 0; margin-bottom: 10px; }
-.logo { 
-    font-family: 'Orbitron'; 
-    font-size: 1.8rem; 
-    font-weight: 700;
-    color: var(--p); /* YÊU CẦU 3: MÀU ĐẸP RỰC RỠ */
-    text-shadow: 0 0 15px var(--p); 
-    letter-spacing: 2px; 
-    text-transform: uppercase;
-}
+        /* Viền sáng phía trên để tạo độ khối */
+        .box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0.5;
+        }
 
-.box h2, .box h3, .box h4 {
-    font-family: 'Orbitron';
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 1.1rem;
-    font-weight: 700; /* YÊU CẦU 2: CHỮ ĐẬM */
-    margin-bottom: 20px;
-    color: var(--p); /* YÊU CẦU 3: MÀU XANH NEON */
-    letter-spacing: 1px;
-    text-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
-}
+        /* 4. LOGO & HEADER ANIMATION */
+        .logo-wrapper {
+            text-align: center;
+            padding: 40px 0;
+        }
 
-/* Ô tiền mặt đẹp hơn */
-.balance { 
-    color: var(--success) !important; 
-    font-family: 'Orbitron'; 
-    font-weight: 700;
-    font-size: 1.2rem;
-    text-shadow: 0 0 10px var(--success);
-}
+        .main-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 15px var(--primary-glow), 0 0 30px var(--primary-glow);
+            letter-spacing: 5px;
+            animation: glitch 3s infinite;
+        }
 
-/* =========================================================
-   6. INPUT & SELECT - BỐ CỤC RÕ RÀNG, DỄ NHÌN
-   ========================================================= */
-input, select, textarea {
-    width: 100%;
-    padding: 14px;
-    margin-bottom: 15px;
-    background: #000;
-    border: 1px solid #333;
-    color: #fff;
-    /* VIỀN BO TRÒN */
-    border-radius: 10px; 
-    outline: none;
-    font-size: 0.95rem;
-    font-weight: 700; /* YÊU CẦU 2: ĐẬM */
-    transition: 0.3s ease;
-}
+        @keyframes glitch {
+            0% { text-shadow: 2px 0 var(--danger), -2px 0 var(--primary); }
+            50% { text-shadow: -2px 0 var(--danger), 2px 0 var(--primary); }
+            100% { text-shadow: 2px 0 var(--danger), -2px 0 var(--primary); }
+        }
 
-input:focus, select:focus {
-    border-color: var(--p);
-    background: #111;
-    box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
-}
+        /* 5. GIAO DIỆN CHÍNH: 2 NÚT MENU (HUB NAVIGATION) */
+        .hub-menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
 
-/* =========================================================
-   7. NÚT BẤM GAMING STYLE - ĐẬM & MÀU RỰC RỠ
-   ========================================================= */
-.btn {
-    width: 100%;
-    padding: 15px;
-    border: none;
-    border-radius: 10px; /* VIỀN BO TRÒN */
-    font-weight: 700; /* YÊU CẦU 2: CHỮ ĐẬM */
-    cursor: pointer;
-    text-transform: uppercase;
-    font-family: 'Orbitron';
-    transition: 0.3s;
-    letter-spacing: 1px;
-}
+        .hub-item {
+            height: 140px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-lg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+        }
 
-.btn-p { 
-    background: linear-gradient(90deg, #00f2ff, #0072ff); 
-    color: #000; 
-    box-shadow: 0 0 15px rgba(0, 242, 255, 0.5); /* YÊU CẦU 3: MÀU ĐẸP RỰC RỠ */
-}
+        /* Hiệu ứng viền Neon chạy vòng quanh khi Hover/Active */
+        .hub-item::after {
+            content: '';
+            position: absolute;
+            width: 150%; height: 150%;
+            background: conic-gradient(transparent, transparent, transparent, var(--primary));
+            animation: rotate 4s linear infinite;
+            opacity: 0;
+            transition: 0.3s;
+        }
 
-.btn-s { 
-    background: #1a1a1a;
-    border: 1px solid var(--s);
-    color: var(--s); 
-    box-shadow: 0 0 10px rgba(112, 0, 255, 0.3); 
-}
-
-.btn:active { transform: scale(0.96); }
-
-/* =========================================================
-   8. LỊCH SỬ GIAO DỊCH - BỐ CỤC CHUYÊN NGHIỆP
-   ========================================================= */
-#history-list {
-    max-height: 250px;
-    overflow-y: auto;
-    padding-right: 5px;
-}
-
-.history-item {
-    font-size: 0.85rem;
-    background: #1a1a1a;
-    padding: 12px;
-    border-radius: 8px; /* VIỀN BO TRÒN */
-    margin-bottom: 10px;
-    border-left: 3px solid var(--s); /* Điểm nhấn tím */
-    color: #ccc;
-    font-weight: 700; /* YÊU CẦU 2: ĐẬM */
-    transition: 0.2s;
-}
-
-.history-item:hover {
-    background: #222;
-    transform: translateX(2px);
-}
-
-/* =========================================================
-   9. MENU ADMIN - VIỀN BO ĐẶC BIỆT
-   ========================================================= */
-#admin-section {
-    /* YÊU CẦU 1: VIỀN BO TRÒN ĐẶC BIỆT */
-    border: 2px dashed var(--danger) !important; 
-    background: rgba(26, 0, 0, 0.9);
-    border-top: none !important;
-    border-radius: 15px;
-}
-
-#admin-section h3 {
-    color: var(--danger) !important;
-    text-shadow: 0 0 10px var(--danger);
-}
-
-/* CÁC THẺ TRẠNG THÁI TRONG LỊCH SỬ */
-.tag-pending { color: var(--warning); font-weight: 700; }
-.tag-done { color: var(--success); font-weight: 700; }
-.tag-card { color: #ff00ea; font-weight: 700; }
-.tag-system { color: #00ffff; font-weight: 700; }
-
-.hidden { display: none !important; }
-
-/* Hiệu ứng chữ cho giá tiền khi chọn dịch vụ */
-.price-display {
-    text-align: center;
-    margin: 10px 0;
-    font-size: 1.5rem;
-    color: var(--p);
-    font-weight: 700; /* YÊU CẦU 2: ĐẬM */
-    font-family: 'Orbitron';
-    text-shadow: 0 0 10px var(--p);
-}
-        /* --- CHỈ THÊM ĐOẠN NÀY VÀO STYLE --- */
-.nav-menu {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.nav-btn {
-    height: 100px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: #151515;
-    border: 2px solid #333;
-    border-radius: 15px; /* Bo tròn viền */
-    cursor: pointer;
-    transition: 0.3s;
-    border-bottom: 4px solid #00f2ff; /* Điểm nhấn Neon */
-}
-
-.nav-btn span {
-    font-family: 'Orbitron';
-    font-weight: 900; /* Chữ siêu đậm */
-    font-size: 0.9rem;
-    color: #fff;
-    text-transform: uppercase;
-}
-
-.nav-btn:active { transform: scale(0.95); background: #222; }
-
-/* Nút quay lại nhỏ xinh */
-.back-btn {
-    background: #222;
-    color: #00f2ff;
-    border: 1px solid #00f2ff;
-    padding: 8px 15px;
-    border-radius: 8px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.hidden { display: none !important; }
+        .hub-item:hover::after, .hub-item.active::after { opacity: 1; }
         
-</style>
-    
+        /* Lớp phủ bên trong để giữ nội dung không bị quay theo viền */
+        .hub-inner {
+            position: absolute;
+            inset: 3px;
+            background: #0f0f0f;
+            border-radius: 17px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .hub-item i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 8px var(--primary-glow));
+        }
+
+        .hub-item span {
+            font-family: var(--font-gaming);
+            font-weight: 800;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 6. HỆ THỐNG NÚT BẤM (BUTTONS) - SIÊU ĐẬM */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: var(--font-gaming);
+            font-weight: 900;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: var(--transition);
+            text-transform: uppercase;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .btn-primary:active { transform: scale(0.96); filter: brightness(1.2); }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        /* 7. INPUT FIELDS */
+        .input-box {
+            margin-bottom: 18px;
+        }
+
+        .input-box label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px 18px;
+            background: var(--bg-input);
+            border: 1px solid #333;
+            border-radius: var(--radius-md);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        /* 8. STATUS CHỮ CỰC ĐẬM */
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .success { background: rgba(0, 255, 136, 0.1); color: var(--success); border: 1px solid var(--success); }
+                /* 9. HIỆU ỨNG CHUYỂN CẢNH MƯỢT MÀ */
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 10. PHẦN TRANG TRÍ PHỤ (DECORATION) */
+        .neon-line {
+            width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            margin: 20px 0;
+            opacity: 0.3;
+        }
+    </style>
 </head>
 <body>
-    <div id="admin-section" class="box" style="margin-top:20px; border: 2px dashed #ff4444; display: none; background: #1a0000; padding: 15px;">
-        <h3 style="color: #ff4444; font-family: 'Orbitron'; font-size: 0.8rem; text-align: center;">QUẢN TRỊ MING FRUIT</h3>
-        <input type="text" id="admin-target-user" placeholder="Nhập tên khách..." oninput="checkPendingMoney()">
-        <div id="admin-pending-info" style="color: #ff9800; font-size: 0.85rem; text-align: center; margin-bottom: 10px; font-weight: bold;"></div>
-        <input type="number" id="admin-amount" placeholder="Số tiền thực nhận">
-        <div style="display: flex; gap: 5px;">
-            <button class="btn" style="background: #00ff88; color: #000; flex: 1;" onclick="adminUpdate(1)">CỘNG TIỀN</button>
-            <button class="btn" style="background: #ff4444; color: #fff; flex: 1;" onclick="adminUpdate(-1)">TRỪ TIỀN</button>
-        </div>
-        <button class="btn" style="background: #ff9800; color: #fff; margin-top: 5px;" onclick="adminReject()">HỦY ĐƠN (SAI MÃ)</button>
-    </div>
 
-    <div style="text-align: center; margin-top: 15px;">
-        <span onclick="checkAdmin()" style="color: transparent; font-size: 9px; cursor: pointer;">Hệ thống Ming Fruit</span>
-    </div>
-    
-    
+    <div class="scanline"></div>
 
-
-
-
-    
-
-<header><div class="logo">MING FRUITS</div></header>
-
-<div class="container">
-    <div id="auth-box" class="box">
-        <h2 style="text-align:center; color: var(--p); font-family: 'Orbitron'; margin-bottom: 20px;">HỆ THỐNG SHOP</h2>
-        <input type="text" id="user-input" placeholder="Tên tài khoản shop">
-        <input type="password" id="pass-input" placeholder="Mật khẩu shop">
-        <button class="btn btn-p" onclick="login()">ĐĂNG NHẬP</button>
-        <button class="btn btn-s" onclick="register()">ĐĂNG KÝ MỚI</button>
-    </div>
-
-        <div id="main-content" class="hidden">
-    <div class="user-info box"> ... </div>
-
-    <div id="hub-menu" class="nav-menu">
-        <div class="nav-btn" onclick="showTab('topup')">
-            <span style="font-size: 20px;">💳</span>
-            <span>NẠP THẺ</span>
-        </div>
-        <div class="nav-btn" onclick="showTab('service')">
-            <span style="font-size: 20px;">⚔️</span>
-            <span>DỊCH VỤ</span>
-        </div>
-    </div>
-
-    <div id="service-area" class="hidden">
-        <button class="back-btn" onclick="backToHub()">← QUAY LẠI</button>
-        <div class="box"> ... </div>
-    </div>
-
-    <div id="topup-area" class="hidden">
-        <button class="back-btn" onclick="backToHub()">← QUAY LẠI</button>
-        <div class="box"> ... </div>
-    </div>
-        </div>
+    <div class="app-container">
         
-        <div class="user-info">
-            <div id="display-name" style="font-size: 0.9rem;">Chào bạn!</div>
-            <div class="balance" id="display-balance">0đ</div>
-        </div>
-        <div class="box">
-            <h3 style="margin:0 0 15px; font-size: 1rem; color: var(--p); font-family: 'Orbitron'; text-align: center; letter-spacing: 1px;">DỊCH VỤ CÀY THUÊ</h3>
-            <form action="https://formspree.io/f/xkoqpjgj" method="POST" onsubmit="return validatePurchase()">
-                <select name="Dich_Vu" id="service" onchange="updatePrice()">
-                    <option value="" data-price="0">-- CHỌN DỊCH VỤ CÀY --</option>
-                    
-                    <optgroup label="🔥 DỊCH VỤ HOT & VIP">
-                        <option value="Max Level (2800)" data-price="80000">Max Level 2800 (80k)</option>
-                        <option value="Full Gear V4" data-price="35000">Full Gear Tộc V4 (35k)</option>
-                        <option value="Mở Khóa 1 Gear Lẻ" data-price="15000">Lấy 1 Gear Lẻ (15k)</option>
-                        <option value="Godhuman" data-price="80000">Võ Godhuman (80k)</option>
-                        <option value="Sanguine Art" data-price="60000">Võ Sanguine Art (60k)</option>
-                    </optgroup>
+        <header class="logo-wrapper">
+            <h1 class="main-title">MING FRUITS</h1>
+            <p style="font-size: 0.7rem; color: #666; letter-spacing: 3px; font-weight: 900;">HIGH-END GAME SERVICES</p>
+        </header>
 
-                    <optgroup label="⚔️ VŨ KHÍ HUYỀN THOẠI">
-                        <option value="Săn Kiếm Mini Yoru (120k)" data-price="120000">Săn Kiếm Mini Yoru (120k)</option>
-    <option value="Lấy Áo Choàng Râu Đen (45k)" data-price="45000">Lấy Áo Choàng Râu Đen (45k)</option>
-                        <option value="Tam kiếm TTK" data-price="85000">True Triple Katana (85k)</option>
-                        <option value="CDK (Cursed Dual)" data-price="75000">Cursed Dual Katana (75k)</option>
-                        <option value="Shark Anchor" data-price="50000">Mỏ Neo Shark Anchor (50k)</option>
-                        <option value="Skull Guitar" data-price="70000">Lấy Đàn Skull Guitar (70k)(kèm full chiêu</option>
-                        <option value="Hallow Scythe" data-price="50000">Lấy Lưỡi Hái (50k)</option>
-                    </optgroup>
-
-                    <optgroup label="💰 CÀY TIỀN & MẢNH (BELI/FRAG)">
-                        <option value="10 Triệu Beli" data-price="20000">10 Triệu Beli (20k)</option>
-                        <option value="25 Triệu Beli" data-price="45000">25 Triệu Beli (45k)</option>
-                        <option value="50 Triệu Beli" data-price="80000">50 Triệu Beli (80k)</option>
-                        <option value="20k Fragments" data-price="25000">20.000 Fragments (25k)</option>
-                        <option value="50k Fragments" data-price="55000">50.000 Fragments (55k)</option>
-                        <option value="100k Fragments" data-price="100000">100.000 Fragments (100k)</option>
-                    </optgroup>
-
-                    <optgroup label="➕ DỊCH VỤ KHÁC">
-                       <option value ="lấy tộc quỷ+up v3" data-price="30000">lấy tộc quỷ+up v3(30k)</option>
-                        <option value="Cày Mastery kiếm,trái" data-price="30000">Cày 100 Mastery các loại kiếm,fruits (30k)</option>
-                        <option value="Cày Mastery súng" data-price="35000">Cày 100 Mastery súng
-                (35k)</option>
-                        <optgroup label="🐉 DỊCH VỤ DRACO (DRAGON)">
-    <option value="Draco V4 Full Gear (PK + 500 Mas)" data-price="100000">Draco V4 Full Gear (Dragon Heart và Storm phải có trước 500 Mas) (100k)</option>
-    <option value="Lấy Dragon Storm" data-price="35000">Lấy  Dragon Storm (35k)</option>
-    <option value="Lấy Dragon Heart" data-price="20000">Lấy  Dragon Heart (20k)</option>
-    <option value="Lấy Draco + Đai Đen" data-price="30000">Lấy Draco phải có trước Đai Đen (30k)</option>
-                        </optgroup>
-                    
-                    </optgroup>
-                </select>
-
-                <div class="price-display" id="price-txt">0đ</div>
-                
-                <input type="hidden" name="User_Web" id="form-user">
-                <input type="hidden" name="Gia_Tien" id="hidden-price">
-                
-                <input type="text" id="roblox-user" name="ID_Game" placeholder="Tên tài khoản Roblox">
-                <input type="text" id="roblox-pass" name="Key_Game" placeholder="Mật mã Roblox">
-                <textarea name="Ghi_Chu" id="form-note" rows="2" placeholder="Ghi chú (Ví dụ: Gear tộc gì, Kiếm gì...)"></textarea>
-                
-                <button type="submit" class="btn btn-p">XÁC NHẬN MUA</button>
-            </form>
-        </div>
-
-        <div class="box" style="margin-top:15px;">
-            <h3 style="margin:0 0 15px; font-size: 0.9rem; color: #7000ff; font-family: 'Orbitron'; text-align: center;">NẠP THẺ CÀO (AUTO)</h3>
-            <form action="https://formspree.io/f/xkoqpjgj" method="POST" onsubmit="return validateCard()">
-                <input type="hidden" name="Loai_Don" value="Nạp Thẻ">
-                <select name="Nha_Mang" id="card-type"><option>Viettel</option><option>Vinaphone</option><option>Mobifone</option></select>
-                <select name="Menh_Gia" id="card-value">
-                    <option value="10000">10.000đ</option><option value="20000">20.000đ</option><option value="50000">50.000đ</option>
-                    <option value="100000">100.000đ</option><option value="200000">200.000đ</option><option value="500000">500.000đ</option>
-                </select>
-                <input type="text" id="card-seri" name="Seri" placeholder="Số Seri thẻ(sai mất thẻ)">
-                <input type="text" id="card-code" name="Ma_The" placeholder="Mã thẻ">
-                <button type="submit" class="btn btn-s">GỬI THẺ</button>
-            </form>
-        </div>
-
-        <div class="box" style="margin-top:15px;">
-            <h4 style="margin:0 0 10px; font-size: 0.8rem; color: var(--p);">LỊCH SỬ GIAO DỊCH</h4>
-            <div id="history-list" style="max-height: 200px; overflow-y: auto;"></div>
-        </div>
-        
-        <button class="btn" style="background:none; color:#ff4444; font-size: 0.8rem; margin-top: 10px;" onclick="logout()">ĐĂNG XUẤT</button>
-    </div>
-</div>
-    
-    
-<script>
-    function showTab(tabName) {
-    document.getElementById('hub-menu').classList.add('hidden'); // Ẩn 2 nút chọn
-    if(tabName === 'service') {
-        document.getElementById('service-area').classList.remove('hidden');
-    } else {
-        document.getElementById('topup-area').classList.remove('hidden');
-    }
-}
-
-function backToHub() {
-    document.getElementById('hub-menu').classList.remove('hidden'); // Hiện lại 2 nút
-    document.getElementById('service-area').classList.add('hidden');
-    document.getElementById('topup-area').classList.add('hidden');
-}
-    
-    let currentUser = localStorage.getItem('sessionUser');
-
-    // Chạy khi trang web tải xong
-    window.onload = function() { 
-        if(currentUser) {
-            showMain(); 
-        }
-    }
-
-    function register() {
-        const u = document.getElementById('user-input').value.trim();
-        const p = document.getElementById('pass-input').value.trim();
-        if(u.length < 3) return alert("Tên tài khoản phải từ 3 ký tự!");
-        if(localStorage.getItem(u)) return alert("Tài khoản này đã tồn tại!");
-        localStorage.setItem(u, JSON.stringify({ pass: p, balance: 0, history: [] }));
-        alert("Đăng ký thành công!");
-    }
-
-    function login() {
-        const u = document.getElementById('user-input').value.trim();
-        const p = document.getElementById('pass-input').value.trim();
-        const data = JSON.parse(localStorage.getItem(u));
-        if(data && data.pass === p) {
-            currentUser = u;
-            localStorage.setItem('sessionUser', u);
-            showMain();
-        } else alert("Sai tài khoản hoặc mật khẩu!");
-    }
-
-    function showMain() {
-        document.getElementById('auth-box').classList.add('hidden');
-        document.getElementById('main-content').classList.remove('hidden');
-        refreshUserUI();
-    }
-
-    function refreshUserUI() {
-        const data = JSON.parse(localStorage.getItem(currentUser));
-        if(!data) return;
-        document.getElementById('display-name').innerText = "Chào, " + currentUser;
-        document.getElementById('display-balance').innerText = data.balance.toLocaleString() + "đ";
-        document.getElementById('form-user').value = currentUser;
-        loadHistory(); // Gọi hàm này để hiện lịch sử
-    }
-
-
-    function updatePrice() {
-        const s = document.getElementById('service');
-        const price = s.options[s.selectedIndex].getAttribute('data-price');
-        document.getElementById('price-txt').innerText = parseInt(price).toLocaleString() + "đ";
-        document.getElementById('hidden-price').value = parseInt(price).toLocaleString() + "đ";
-    }
-
-    function validatePurchase() {
-    const s = document.getElementById('service');
-    const price = parseInt(s.options[s.selectedIndex].getAttribute('data-price'));
-    const data = JSON.parse(localStorage.getItem(currentUser));
-    if(price === 0) { alert("Chọn dịch vụ!"); return false; }
-    if(data.balance < price) { alert("Không đủ tiền!"); return false; }
-
-    data.balance -= price;
-    // Thêm chữ [ĐANG CHỜ] để admin còn biết mà duyệt
-    data.history.unshift(`<span style="color: #ff9800;">[ĐANG CHỜ]</span> ${s.value} (-${price.toLocaleString()}đ)`);
-    localStorage.setItem(currentUser, JSON.stringify(data));
-    refreshUserUI();
-    alert("Mua thành công! Vui lòng đợi Admin vào cày.");
-    return true;
-    }
-    
-
-    function validateCard() {
-        const seri = document.getElementById('card-seri').value.trim();
-        const code = document.getElementById('card-code').value.trim();
-        const val = document.getElementById('card-value').value;
-        const type = document.getElementById('card-type').value;
-        if(seri === "" || code === "") { alert("Nhập đủ thông tin!"); return false; }
-
-        const data = JSON.parse(localStorage.getItem(currentUser));
-        const log = `<span style="color: #ff9800;">[CHỜ DUYỆT]</span> ${type} ${parseInt(val).toLocaleString()}đ`;
-        data.history.unshift(log);
-        localStorage.setItem(currentUser, JSON.stringify(data));
-        alert("Gửi thẻ thành công!");
-        return true;
-    }
-
-        function checkPendingMoney() {
-    const target = document.getElementById('admin-target-user').value.trim();
-    const infoDiv = document.getElementById('admin-pending-info');
-    let userData = localStorage.getItem(target);
-
-    if (userData && infoDiv) {
-        let data = JSON.parse(userData);
-        let total = 0;
-        if (data.history) {
-            data.history.forEach(item => {
-                // Chỉ quét những dòng có chữ [CHỜ DUYỆT]
-                if (item.includes('[CHỜ DUYỆT]')) {
-                    // Tách lấy phần số đứng trước chữ 'đ' và xóa dấu chấm
-                    let parts = item.split(' '); 
-                    let priceStr = parts[parts.length - 1]; // Lấy phần cuối cùng (ví dụ: 10.000đ)
-                    let cleanNumber = priceStr.replace(/\./g, '').replace('đ', '');
-                    
-                    let num = parseInt(cleanNumber);
-                    if (!isNaN(num)) total += num;
-                }
-            });
-        }
-        
-        if (total > 0) {
-            infoDiv.innerHTML = `💰 Đang nạp: ${total.toLocaleString()}đ`;
-            document.getElementById('admin-amount').value = total;
-        } else {
-            infoDiv.innerHTML = "❌ Không có tiền chờ";
-            document.getElementById('admin-amount').value = "";
-        }
-    } else if (infoDiv) {
-        infoDiv.innerHTML = "";
-    }
-    }
-    
-    function adminUpdate(type) {
-        const target = document.getElementById('admin-target-user').value.trim();
-        let amount = parseInt(document.getElementById('admin-amount').value);
-        if (!target || isNaN(amount)) return alert("Nhập đủ tên và số tiền!");
-
-        let userData = localStorage.getItem(target);
-        if (userData) {
-            let data = JSON.parse(userData);
-            let finalAmount = (type === 1) ? amount : -amount;
-            data.balance += finalAmount;
+        <div id="auth-box" class="box fade-in-up">
+            <h2 style="text-align: center; color: var(--primary); margin-bottom: 25px; font-size: 1.2rem;">HỆ THỐNG ĐĂNG NHẬP</h2>
             
-            // Sửa lỗi đóng ngoặc ở đây (Thay cho đoạn trong ảnh 6723)
-            if (type === 1) {
-                data.history = data.history.map(item => {
-                    return item.replace('[CHỜ DUYỆT]', '<b style="color: #00ff88;">[ĐÃ XONG]</b>');
-                });
+            <div class="input-box">
+                <label><i class="fa-solid fa-user-ninja"></i> Tên tài khoản</label>
+                <input type="text" id="username" placeholder="Nhập ID shop của bạn...">
+            </div>
+
+            <div class="input-box">
+                <label><i class="fa-solid fa-shield-halved"></i> Mật khẩu</label>
+                <input type="password" id="password" placeholder="Nhập mật khẩu an toàn...">
+            </div>
+
+            <button class="btn btn-primary" onclick="handleLogin()">
+                <span class="btn-text">TRUY CẬP NGAY</span>
+                <i class="fa-solid fa-bolt"></i>
+            </button>
+
+            <div style="text-align: center; margin-top: 15px;">
+                <span style="font-size: 0.8rem; color: #555;">Chưa có tài khoản? </span>
+                <span style="font-size: 0.8rem; color: var(--secondary); cursor: pointer;" onclick="toggleAuth()">Đăng ký tại đây</span>
+            </div>
+        </div>
+
+        <div id="main-interface" class="hidden">
+            
+            <div class="box" style="padding: 15px 20px; border-left: 5px solid var(--success);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div id="display-user" style="font-family: var(--font-gaming); font-size: 0.9rem; color: #fff;">PLAYER_NAME</div>
+                        <div class="status-badge success">ONLINE</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.7rem; color: #888;">SỐ DƯ HIỆN TẠI:</div>
+                        <div id="user-balance" style="font-family: var(--font-gaming); color: var(--success); font-size: 1.2rem;">0đ</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="hub-navigation" class="hub-menu fade-in-up">
+                <div class="hub-item" onclick="showTab('topup')">
+                    <div class="hub-inner">
+                        <i class="fa-solid fa-credit-card"></i>
+                        <span>NẠP THẺ</span>
+                    </div>
+                </div>
+                <div class="hub-item" onclick="showTab('service')">
+                    <div class="hub-inner">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <span>DỊCH VỤ</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="topup-area" class="hidden fade-in-up">
+                <button class="btn" style="background:none; color: #555; font-size: 0.7rem; margin-bottom: 10px;" onclick="backToHub()">
+                    <i class="fa-solid fa-arrow-left"></i> QUAY LẠI MENU
+                </button>
+                <div class="box">
+                    <h3 style="color: var(--primary); margin-bottom: 15px;">HỆ THỐNG NẠP THẺ</h3>
+                    <div class="input-box">
+                        <label>Loại thẻ cào</label>
+                        <select id="card-type">
+                            <option>Viettel (Nhanh)</option>
+                            <option>Mobifone</option>
+                            <option>Vinaphone</option>
+                            <option>Zing</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label>Mệnh giá</label>
+                        <select id="card-value">
+                            <option value="10000">10,000đ</option>
+                            <option value="20000">20,000đ</option>
+                            <option value="50000">50,000đ</option>
+                            <option value="100000">100,000đ</option>
+                            <option value="500000">500,000đ</option>
+                        </select>
+                    </div>
+                    <input type="text" placeholder="Nhập mã thẻ..." style="margin-bottom: 15px;">
+                    <input type="text" placeholder="Nhập số Seri..." style="margin-bottom: 15px;">
+                    <button class="btn btn-primary" onclick="processTopup()">XÁC NHẬN NẠP</button>
+                </div>
+            </div>
+
+            <div id="service-area" class="hidden fade-in-up">
+                <button class="btn" style="background:none; color: #555; font-size: 0.7rem; margin-bottom: 10px;" onclick="backToHub()">
+                    <i class="fa-solid fa-arrow-left"></i> QUAY LẠI MENU
+                </button>
+                <div class="box" style="border-top: 2px solid var(--secondary);">
+                    <h3 style="color: var(--secondary); margin-bottom: 15px;">DỊCH VỤ CÀY THUÊ</h3>
+                    <div class="input-box">
+                        <label>Chọn gói cày</label>
+                        <select id="service-type" onchange="calcPrice()">
+                            <option value="0">-- CHỌN GÓI CÀY --</option>
+                            <option value="80000">Max Level 2550 (80k)</option>
+                            <option value="50000">Lấy Tộc V4 (50k)</option>
+                            <option value="150000">Săn Bounty 5M (150k)</option>
+                            <option value="70000">Cày Mastery Kiếm/Fruit (70k)</option>
+                        </select>
+                    </div>
+                    <div id="price-display" style="text-align: center; font-size: 2rem; color: var(--secondary); font-family: var(--font-gaming); margin-bottom: 20px;">0đ</div>
+                    <input type="text" placeholder="Tài khoản Roblox..." style="margin-bottom: 15px;">
+                    <input type="password" placeholder="Mật khẩu Roblox..." style="margin-bottom: 15px;">
+                    <button class="btn" style="background: var(--secondary); color: #fff;" onclick="processService()">MUA NGAY</button>
+                </div>
+            </div>
+
+            <div class="box" style="margin-top: 10px;">
+                <h4 style="font-family: var(--font-gaming); font-size: 0.7rem; color: #555; margin-bottom: 15px;">RECENT ACTIVITIES</h4>
+                <div id="history-container">
+                    <div style="font-size: 0.8rem; color: #444; text-align: center; padding: 20px;">Chưa có hoạt động nào...</div>
+                </div>
+            </div>
+
+            <div style="text-align: center; padding: 30px 0;">
+                <button onclick="handleLogout()" style="background:none; border:none; color:#333; font-weight: 900; font-size: 0.7rem; cursor: pointer;">ĐĂNG XUẤT HỆ THỐNG</button>
+            </div>
+        </div>
+
+    </div> <script>
+                                    /* 9. HIỆU ỨNG CHUYỂN CẢNH MƯỢT MÀ */
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 10. PHẦN TRANG TRÍ PHỤ (DECORATION) */
+        .neon-line {
+            width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            margin: 20px 0;
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scanline"></div>
+
+    <div class="app-container">
+        
+        <header class="logo-wrapper">
+            <h1 class="main-title">MING FRUITS</h1>
+            <p style="font-size: 0.7rem; color: #666; letter-spacing: 3px; font-weight: 900;">HIGH-END GAME SERVICES</p>
+        </header>
+
+        <div id="auth-box" class="box fade-in-up">
+            <h2 style="text-align: center; color: var(--primary); margin-bottom: 25px; font-size: 1.2rem;">HỆ THỐNG ĐĂNG NHẬP</h2>
+            
+            <div class="input-box">
+                <label><i class="fa-solid fa-user-ninja"></i> Tên tài khoản</label>
+                <input type="text" id="username" placeholder="Nhập ID shop của bạn...">
+            </div>
+
+            <div class="input-box">
+                <label><i class="fa-solid fa-shield-halved"></i> Mật khẩu</label>
+                <input type="password" id="password" placeholder="Nhập mật khẩu an toàn...">
+            </div>
+
+            <button class="btn btn-primary" onclick="handleLogin()">
+                <span class="btn-text">TRUY CẬP NGAY</span>
+                <i class="fa-solid fa-bolt"></i>
+            </button>
+
+            <div style="text-align: center; margin-top: 15px;">
+                <span style="font-size: 0.8rem; color: #555;">Chưa có tài khoản? </span>
+                <span style="font-size: 0.8rem; color: var(--secondary); cursor: pointer;" onclick="toggleAuth()">Đăng ký tại đây</span>
+            </div>
+        </div>
+
+        <div id="main-interface" class="hidden">
+            
+            <div class="box" style="padding: 15px 20px; border-left: 5px solid var(--success);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div id="display-user" style="font-family: var(--font-gaming); font-size: 0.9rem; color: #fff;">PLAYER_NAME</div>
+                        <div class="status-badge success">ONLINE</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.7rem; color: #888;">SỐ DƯ HIỆN TẠI:</div>
+                        <div id="user-balance" style="font-family: var(--font-gaming); color: var(--success); font-size: 1.2rem;">0đ</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="hub-navigation" class="hub-menu fade-in-up">
+                <div class="hub-item" onclick="showTab('topup')">
+                    <div class="hub-inner">
+                        <i class="fa-solid fa-credit-card"></i>
+                        <span>NẠP THẺ</span>
+                    </div>
+                </div>
+                <div class="hub-item" onclick="showTab('service')">
+                    <div class="hub-inner">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <span>DỊCH VỤ</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="topup-area" class="hidden fade-in-up">
+                <button class="btn" style="background:none; color: #555; font-size: 0.7rem; margin-bottom: 10px;" onclick="backToHub()">
+                    <i class="fa-solid fa-arrow-left"></i> QUAY LẠI MENU
+                </button>
+                <div class="box">
+                    <h3 style="color: var(--primary); margin-bottom: 15px;">HỆ THỐNG NẠP THẺ</h3>
+                    <div class="input-box">
+                        <label>Loại thẻ cào</label>
+                        <select id="card-type">
+                            <option>Viettel (Nhanh)</option>
+                            <option>Mobifone</option>
+                            <option>Vinaphone</option>
+                            <option>Zing</option>
+                        </select>
+                    </div>
+                    <div class="input-box">
+                        <label>Mệnh giá</label>
+                        <select id="card-value">
+                            <option value="10000">10,000đ</option>
+                            <option value="20000">20,000đ</option>
+                            <option value="50000">50,000đ</option>
+                            <option value="100000">100,000đ</option>
+                            <option value="500000">500,000đ</option>
+                        </select>
+                    </div>
+                    <input type="text" placeholder="Nhập mã thẻ..." style="margin-bottom: 15px;">
+                    <input type="text" placeholder="Nhập số Seri..." style="margin-bottom: 15px;">
+                    <button class="btn btn-primary" onclick="processTopup()">XÁC NHẬN NẠP</button>
+                </div>
+            </div>
+
+            <div id="service-area" class="hidden fade-in-up">
+                <button class="btn" style="background:none; color: #555; font-size: 0.7rem; margin-bottom: 10px;" onclick="backToHub()">
+                    <i class="fa-solid fa-arrow-left"></i> QUAY LẠI MENU
+                </button>
+                <div class="box" style="border-top: 2px solid var(--secondary);">
+                    <h3 style="color: var(--secondary); margin-bottom: 15px;">DỊCH VỤ CÀY THUÊ</h3>
+                    <div class="input-box">
+                        <label>Chọn gói cày</label>
+                        <select id="service-type" onchange="calcPrice()">
+                            <option value="0">-- CHỌN GÓI CÀY --</option>
+                            <option value="80000">Max Level 2550 (80k)</option>
+                            <option value="50000">Lấy Tộc V4 (50k)</option>
+                            <option value="150000">Săn Bounty 5M (150k)</option>
+                            <option value="70000">Cày Mastery Kiếm/Fruit (70k)</option>
+                        </select>
+                    </div>
+                    <div id="price-display" style="text-align: center; font-size: 2rem; color: var(--secondary); font-family: var(--font-gaming); margin-bottom: 20px;">0đ</div>
+                    <input type="text" placeholder="Tài khoản Roblox..." style="margin-bottom: 15px;">
+                    <input type="password" placeholder="Mật khẩu Roblox..." style="margin-bottom: 15px;">
+                    <button class="btn" style="background: var(--secondary); color: #fff;" onclick="processService()">MUA NGAY</button>
+                </div>
+            </div>
+
+            <div class="box" style="margin-top: 10px;">
+                <h4 style="font-family: var(--font-gaming); font-size: 0.7rem; color: #555; margin-bottom: 15px;">RECENT ACTIVITIES</h4>
+                <div id="history-container">
+                    <div style="font-size: 0.8rem; color: #444; text-align: center; padding: 20px;">Chưa có hoạt động nào...</div>
+                </div>
+            </div>
+
+            <div style="text-align: center; padding: 30px 0;">
+                <button onclick="handleLogout()" style="background:none; border:none; color:#333; font-weight: 900; font-size: 0.7rem; cursor: pointer;">ĐĂNG XUẤT HỆ THỐNG</button>
+            </div>
+        </div>
+
+    </div> <script>
+                /* ==========================================================================
+           11. HỆ THỐNG QUẢN LÝ DỮ LIỆU (LOCAL STORAGE CORE)
+           ========================================================================== */
+        const STORAGE_KEY = "MING_FRUITS_DATA_V2";
+        
+        // Khởi tạo dữ liệu mặc định
+        let store = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+            isLoggedIn: false,
+            currentUser: null,
+            users: {}, // Lưu danh sách tài khoản: {username: {password, balance, history}}
+            activeTab: 'hub'
+        };
+
+        // Hàm lưu dữ liệu vào bộ nhớ trình duyệt
+        function saveData() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+        }
+
+        /* ==========================================================================
+           12. LOGIC XÁC THỰC (AUTH LOGIC)
+           ========================================================================== */
+        let isRegisterMode = false;
+
+        function toggleAuth() {
+            isRegisterMode = !isRegisterMode;
+            const title = document.querySelector('#auth-box h2');
+            const btnText = document.querySelector('#auth-box .btn-text');
+            const toggleLink = document.querySelector('#auth-box div span:last-child');
+
+            if (isRegisterMode) {
+                title.innerText = "TẠO TÀI KHOẢN MỚI";
+                btnText.innerText = "ĐĂNG KÝ NGAY";
+                toggleLink.innerText = "Đăng nhập tại đây";
+            } else {
+                title.innerText = "HỆ THỐNG ĐĂNG NHẬP";
+                btnText.innerText = "TRUY CẬP NGAY";
+                toggleLink.innerText = "Đăng ký tại đây";
             }
+        }
+
+        function handleLogin() {
+            const user = document.getElementById('username').value.trim();
+            const pass = document.getElementById('password').value.trim();
+
+            if (!user || !pass) {
+                showToast("Vui lòng điền đầy đủ thông tin!", "danger");
+                return;
+            }
+
+            if (isRegisterMode) {
+                // Logic Đăng ký
+                if (store.users[user]) {
+                    showToast("Tài khoản đã tồn tại!", "danger");
+                } else {
+                    store.users[user] = { password: pass, balance: 0, history: [] };
+                    showToast("Đăng ký thành công! Hãy đăng nhập.", "success");
+                    toggleAuth();
+                }
+            } else {
+                // Logic Đăng nhập
+                if (store.users[user] && store.users[user].password === pass) {
+                    store.isLoggedIn = true;
+                    store.currentUser = user;
+                    showToast("Đăng nhập thành công!", "success");
+                    renderUI();
+                } else {
+                    showToast("Sai tài khoản hoặc mật khẩu!", "danger");
+                }
+            }
+            saveData();
+        }
+
+        function handleLogout() {
+            if(confirm("Bạn muốn đăng xuất khỏi hệ thống?")) {
+                store.isLoggedIn = false;
+                store.currentUser = null;
+                saveData();
+                location.reload();
+            }
+        }
+
+        /* ==========================================================================
+           13. ĐIỀU KHIỂN GIAO DIỆN (UI CONTROLLER)
+           ========================================================================== */
+        function renderUI() {
+            const authBox = document.getElementById('auth-box');
+            const mainInt = document.getElementById('main-interface');
             
-            data.history.unshift(`<span style="color: #00ff88;">[HỆ THỐNG]</span> ${finalAmount > 0 ? '+' : ''}${finalAmount.toLocaleString()}đ`);
-            localStorage.setItem(target, JSON.stringify(data));
-            alert("Thành công!");
-            location.reload();
-        } else alert("Sai tài khoản!");
-    }
-
-    function adminReject() {
-        const target = document.getElementById('admin-target-user').value.trim();
-        let userData = localStorage.getItem(target);
-        if (userData) {
-            let data = JSON.parse(userData);
-            data.history = data.history.map(item => item.replace('[CHỜ DUYỆT]', '<b style="color: #ff4444;">[THẺ SAI/HỦY]</b>'));
-            localStorage.setItem(target, JSON.stringify(data));
-            alert("Đã hủy đơn!");
-            location.reload();
+            if (store.isLoggedIn) {
+                authBox.classList.add('hidden');
+                mainInt.classList.remove('hidden');
+                
+                // Cập nhật thông tin User
+                document.getElementById('display-user').innerText = store.currentUser.toUpperCase();
+                const currentBalance = store.users[store.currentUser].balance;
+                document.getElementById('user-balance').innerText = currentBalance.toLocaleString() + "đ";
+                
+                renderHistory();
+            } else {
+                authBox.classList.remove('hidden');
+                mainInt.classList.add('hidden');
+            }
         }
-    }
 
-    function loadHistory() {
-        const data = JSON.parse(localStorage.getItem(currentUser));
-        const list = document.getElementById('history-list');
-        if(data && data.history && data.history.length > 0) {
-            list.innerHTML = data.history.map(h => `<div class="history-item">${h}</div>`).join('');
-        } else {
-            list.innerHTML = '<div class="history-item">Chưa có giao dịch.</div>';
+        function showTab(tabName) {
+            document.getElementById('hub-navigation').classList.add('hidden');
+            if (tabName === 'topup') {
+                document.getElementById('topup-area').classList.remove('hidden');
+            } else if (tabName === 'service') {
+                document.getElementById('service-area').classList.remove('hidden');
+            }
+            store.activeTab = tabName;
+            saveData();
         }
-    }
 
-    function checkAdmin() {
-        let p = prompt("Mã Admin:");
-        if(p === "123456") document.getElementById('admin-section').style.display = 'block';
-    }
+        function backToHub() {
+            document.getElementById('hub-navigation').classList.remove('hidden');
+            document.getElementById('topup-area').classList.add('hidden');
+            document.getElementById('service-area').classList.add('hidden');
+            store.activeTab = 'hub';
+            saveData();
+        }
 
-    function logout() {
-        localStorage.removeItem('sessionUser');
-        location.reload();
-    }
-</script>
+        /* ==========================================================================
+           14. LOGIC DỊCH VỤ & TÍNH TOÁN
+           ========================================================================== */
+        function calcPrice() {
+            const select = document.getElementById('service-type');
+            const price = parseInt(select.value);
+            const display = document.getElementById('price-display');
+            
+            display.innerText = price.toLocaleString() + "đ";
+            
+            if (price > 0) {
+                display.style.textShadow = "0 0 15px var(--secondary-glow)";
+            } else {
+                display.style.textShadow = "none";
+            }
+        }
+
+        function processService() {
+            const user = store.currentUser;
+            const price = parseInt(document.getElementById('service-type').value);
+            const serviceName = document.getElementById('service-type').options[document.getElementById('service-type').selectedIndex].text;
+
+            if (price === 0) {
+                showToast("Vui lòng chọn dịch vụ!", "warning");
+                return;
+            }
+
+            if (store.users[user].balance < price) {
+                showToast("Số dư không đủ! Vui lòng nạp thêm.", "danger");
+                return;
+            }
+
+            // Trừ tiền và lưu lịch sử
+            store.users[user].balance -= price;
+            const log = {
+                time: new Date().toLocaleString(),
+                content: `Đã mua: ${serviceName}`,
+                type: 'buy'
+            };
+            store.users[user].history.push(log);
+            
+            showToast("Thanh toán thành công! Đang xử lý đơn hàng.", "success");
+            saveData();
+            renderUI();
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('history-container');
+            const history = store.users[store.currentUser].history;
+            
+            if (history.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:#444; padding:20px;">Chưa có hoạt động...</div>`;
+                return;
+            }
+
+            container.innerHTML = history.slice().reverse().map(item => `
+                <div style="background:rgba(255,255,255,0.02); padding:12px; border-radius:10px; margin-bottom:10px; border-left: 3px solid ${item.type === 'buy' ? 'var(--secondary)' : 'var(--success)'}">
+                    <div style="font-size:0.65rem; color:#666;">${item.time}</div>
+                    <div style="font-size:0.85rem; font-weight:700;">${item.content}</div>
+                </div>
+            `).join('');
+        }
+                /* ==========================================================================
+           15. HỆ THỐNG THÔNG BÁO (TOAST NOTIFICATION)
+           ========================================================================== */
+        function showToast(msg, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fade-in-up`;
+            
+            // Style cho Toast ngay tại đây để tối ưu hiệu năng
+            const colors = {
+                success: 'var(--success)',
+                danger: 'var(--danger)',
+                warning: 'var(--warning)'
+            };
+
+            Object.assign(toast.style, {
+                position: 'fixed',
+                top: '20px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                zIndex: '9999',
+                background: 'rgba(10, 10, 10, 0.95)',
+                padding: '15px 25px',
+                borderRadius: '12px',
+                border: `1px solid ${colors[type]}`,
+                color: '#fff',
+                fontSize: '0.85rem',
+                fontWeight: '900',
+                boxShadow: `0 0 20px ${colors[type]}44`,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                minWidth: '280px',
+                textAlign: 'center'
+            });
+
+            const icon = type === 'success' ? 'check-circle' : 'triangle-exclamation';
+            toast.innerHTML = `<i class="fa-solid fa-${icon}" style="color:${colors[type]}"></i> ${msg}`;
+
+            document.body.appendChild(toast);
+
+            // Tự động xóa sau 3 giây
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = '0.5s';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        /* ==========================================================================
+           16. LOGIC NẠP THẺ (TOPUP SYSTEM)
+           ========================================================================== */
+        function processTopup() {
+            const user = store.currentUser;
+            const cardValue = parseInt(document.getElementById('card-value').value);
+            
+            // Giả lập xử lý nạp thẻ
+            showToast("Đang gửi yêu cầu nạp thẻ...", "warning");
+            
+            setTimeout(() => {
+                store.users[user].balance += cardValue;
+                const log = {
+                    time: new Date().toLocaleString(),
+                    content: `Nạp thẻ thành công: +${cardValue.toLocaleString()}đ`,
+                    type: 'topup'
+                };
+                store.users[user].history.push(log);
+                
+                showToast(`Nạp thành công ${cardValue.toLocaleString()}đ!`, "success");
+                saveData();
+                renderUI();
+                backToHub();
+            }, 2000);
+        }
+
+        /* ==========================================================================
+           17. HỆ THỐNG ADMIN BACKDOOR (CẬP NHẬT TIỀN NHANH)
+           Gõ lệnh: "admin" + [Dấu cách] + [Số tiền] vào ô Username 
+           sau đó nhấn Đăng nhập để kích hoạt lệnh ẩn.
+           ========================================================================== */
+        function checkAdminCommand(input) {
+            if (input.startsWith('admin ')) {
+                const amount = parseInt(input.split(' ')[1]);
+                if (!isNaN(amount) && store.currentUser) {
+                    store.users[store.currentUser].balance += amount;
+                    showToast(`ADMIN: Đã cộng ${amount.toLocaleString()}đ!`, "success");
+                    saveData();
+                    renderUI();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Chỉnh sửa lại hàm handleLogin một chút để nhận lệnh Admin
+        const originalLogin = handleLogin;
+        handleLogin = function() {
+            const userVal = document.getElementById('username').value;
+            if (checkAdminCommand(userVal)) {
+                document.getElementById('username').value = "";
+                return;
+            }
+            originalLogin();
+        };
+
+        /* ==========================================================================
+           18. KHỞI CHẠY (INITIALIZATION)
+           ========================================================================== */
+        window.addEventListener('DOMContentLoaded', () => {
+            renderUI();
+            
+            // Khôi phục Tab cũ nếu đang dùng dở
+            if (store.isLoggedIn && store.activeTab !== 'hub') {
+                showTab(store.activeTab);
+            }
+        });
+
+    </script>
 </body>
 </html>
