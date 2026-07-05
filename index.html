@@ -236,48 +236,8 @@
             <div class="script-content">
                 <div class="code-box">
                     <button class="copy-btn" onclick="copyScript(this)">Copy</button>
-<pre><code>-- MINGFRUIT PRO V1 - COMPACT
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local TweenService = game:GetService("TweenService")
-local LocalPlayer = Players.LocalPlayer
-local Mouse = LocalPlayer:GetMouse()
-
-local flying = false
-local noclip = false
-local speed = 50
-
--- UI Siêu nhỏ
-local sg = Instance.new("ScreenGui", game.CoreGui)
-local f = Instance.new("Frame", sg)
-f.Size = UDim2.new(0, 120, 0, 70); f.Position = UDim2.new(0.8, 0, 0.1, 0)
-f.BackgroundColor3 = Color3.fromRGB(0,0,0); f.Active = true; f.Draggable = true
-
-local spd = Instance.new("TextBox", f)
-spd.Size = UDim2.new(1, 0, 0, 20); spd.PlaceholderText = "Tốc độ: 50"; spd.Text = "50"
-
-local flyBtn = Instance.new("TextButton", f); flyBtn.Size = UDim2.new(0.5, 0, 0, 25); flyBtn.Position = UDim2.new(0,0,0.3,0); flyBtn.Text = "Bay"
-local ncBtn = Instance.new("TextButton", f); ncBtn.Size = UDim2.new(0.5, 0, 0, 25); ncBtn.Position = UDim2.new(0.5,0,0.3,0); ncBtn.Text = "Xuyên"
-
--- Logic Bay (Anti-Ban: Sử dụng di chuyển mượt)
-RunService.RenderStepped:Connect(function()
-    if flying then
-        local cam = workspace.CurrentCamera
-        local hrp = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-        if hrp then
-            hrp.CFrame = hrp.CFrame + (cam.CFrame.LookVector * (tonumber(spd.Text) / 10))
-            hrp.Velocity = Vector3.new(0,0,0)
-        end
-    end
-    if noclip then
-        for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
-            if part:IsA("BasePart") then part.CanCollide = false end
-        end
-    end
-end)
-
-flyBtn.MouseButton1Click:Connect(function() flying = not flying; flyBtn.BackgroundColor3 = flying and Color3.fromRGB(0,255,0) or Color3.fromRGB(200,200,200) end)
-ncBtn.MouseButton1Click:Connect(function() noclip = not noclip; ncBtn.BackgroundColor3 = noclip and Color3.fromRGB(0,255,0) or Color3.fromRGB(200,200,200) end)</code></pre>
+<pre><code>loadstring(game:HttpGet("https://raw.githubusercontent.com/potskghost-del/Bay-xuyen-tuong/refs/heads/main/Bay%2Cxuy%C3%AAn%20t%C6%B0%E1%BB%9Dng.lua"))()
+</code></pre>
                 </div>
             </div>
         </div>
